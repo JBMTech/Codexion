@@ -93,6 +93,7 @@ void ft_init_dongles(t_data *data)
     {
         data->dongles[i].number = i;
         data->dongles[i].available = 1;
+        pthread_mutex_init(&data->dongles[i].mutex, NULL);
         i++;
     }
 }
@@ -117,10 +118,33 @@ void *routine(void *arg)
 
     coder = (t_coder *)arg;
 
-    printf("Coder %d started\n", coder->coder);
+    pthread_mutex_lock(&coder->left->mutex);
+    printf("Coder %d took left dongle\n", coder->coder);
+
+    pthread_mutex_lock(&coder->right->mutex);
+    printf("Coder %d took right dongle\n", coder->coder);
+
+    printf("Coder %d compiling\n", coder->coder);
+
     sleep(2);
-    printf("Coder %d finished\n", coder->coder);
+
+    pthread_mutex_unlock(&coder->right->mutex);
+    pthread_mutex_unlock(&coder->left->mutex);
+    
     return (NULL);
+}
+
+void ft_assign_dongles(t_data *data)
+{
+    int i;
+
+    i = 0;
+    while (i < data->number_coders)
+    {
+        data->coders[i].left = &data->dongles[i];
+        data->coders[i].right = &data->dongles[(i + 1) % data->number_coders];
+        i++;
+    }
 }
 
 int main(int argc, char **argv)
@@ -138,6 +162,7 @@ int main(int argc, char **argv)
         ft_init_data(&data);
         ft_init_coders(&data);
         ft_init_dongles(&data);
+        ft_assign_dongles(&data);
 
         int i;
 

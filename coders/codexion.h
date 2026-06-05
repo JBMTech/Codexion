@@ -6,6 +6,7 @@ typedef struct s_dongle
 {
 	int				number;
 	int				available;
+	pthread_mutex_t	mutex;
 }	t_dongle;
 
 typedef struct s_coder{
