@@ -10,14 +10,13 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "codexion.h"
+#include "include/codexion.h"
 
 void *ft_checker_program(void *arg)
 {
     t_data  *data;
     int     coder_finish;
 
-    coder_finish = 0;
     data = (t_data *)arg;
     while (ft_get_active_program(data) == 1)
     {
@@ -26,29 +25,32 @@ void *ft_checker_program(void *arg)
         if (data->number_coders == coder_finish)
         {
             ft_stop_program(data);
+            pthread_mutex_lock(&data->lock_print);
             printf("SUCCESS\n");
+            pthread_mutex_unlock(&data->lock_print);
             return (NULL);
         }
+        usleep(100);
     }
     return (NULL);
     
 }
 
-int ft_check_burnout(t_data *data, int *count)
+int ft_check_burnout(t_data *data, int *finished)
 {
     int index;
 
-    *count = 0;
+    *finished = 0;
     index = 0;
     while (data->number_coders != index)
     {
         if (ft_get_active_program(&data->coders[index]) == 1)
-            (*count)++;
+            (*finished)++;
         if ((ft_get_time_ms() - ft_get_burnout(&data->coders[index])) 
             > data->time_burnout)
         {
             ft_stop_program(data);
-            ft_print_log(data, BURN, data->coders->coder_id);
+            ft_print_log(data, BURN, data->coders[index].coder_id);
             return (1);
         }
         index++;
@@ -58,5 +60,10 @@ int ft_check_burnout(t_data *data, int *count)
 
 void ft_stop_program(t_data *data)
 {
-
+    pthread_mutex_lock(&data->lock_program);
+	data->active_program = 0;
+	pthread_mutex_unlock(&data->lock_print);
+	pthread_mutex_lock(&data->queue_coders.lock);
+	pthread_cond_broadcast(&data->queue_coders.cond);
+	pthread_mutex_unlock(&data->queue_coders.lock);
 }

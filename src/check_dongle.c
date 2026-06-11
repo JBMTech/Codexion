@@ -10,12 +10,12 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "codexion.h"
+#include "include/codexion.h"
 
 int ft_take_dongle(t_dongle *dongle, t_data *data)
 {
     pthread_mutex_lock(&dongle->lock_cooldown);
-    if (get_start_time(data) >= dongle->cooldown)
+    if (ft_get_start_time(data) >= dongle->cooldown)
         return (0);
     pthread_mutex_unlock(&dongle->lock_cooldown);
     return (1);
@@ -41,8 +41,8 @@ int ft_check_take_dongle(t_coder *coder)
             pthread_mutex_unlock(&coder->left_dongle->lock_cooldown);
             return (1);
         }
-        return (1);
     }
+    return (1);
 }
 
 void ft_release_dongles(t_coder *coder, t_data *data)

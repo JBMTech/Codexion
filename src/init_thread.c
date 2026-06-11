@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "codexion.h"
+#include "include/codexion.h"
 
 void ft_create_thread(t_data *data)
 {
@@ -23,4 +23,17 @@ void ft_create_thread(t_data *data)
         pthread_create(&data->coders[index].thread_id, NULL, ft_coder_thread, &data->coders[index]);
         index++;
     }
+}
+
+void    ft_join_thread(t_data *data)
+{
+	int	index;
+
+	index = 0;
+	pthread_join(data->checker_id, NULL);
+	while (index != data->number_coders)
+	{
+		pthread_join(data->coders[index].thread_id, NULL);
+		index++;
+	}
 }

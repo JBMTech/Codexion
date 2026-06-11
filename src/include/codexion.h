@@ -36,6 +36,13 @@
 # define REFACT		"REFACTORING"
 # define BURN		"BURNED_OUT"
 
+typedef struct s_data			t_data;
+typedef struct s_coder			t_coder;
+typedef struct s_dongle			t_dongle;
+typedef struct s_node_coder		t_node_coder;
+typedef struct s_queue			t_queue;
+
+
 typedef struct s_nodo_coder
 {
 	t_coder			*coder;
@@ -101,12 +108,15 @@ int ft_valid_scheduler(char *scheduler);
 int ft_parser_args(char **argv);
 void ft_generated_data(t_data *data, char **argv);
 
+//
+
 // getter
 int	ft_get_active_program(t_data *data);
 long long ft_get_burnout(t_coder *coder);
 
 // init_thread
 void ft_create_thread(t_data *data);
+void    ft_join_thread(t_data *data);
 
 // monitoring
 void *ft_checker_program(void *arg);
@@ -127,7 +137,7 @@ int ft_check_take_dongle(t_coder *coder);
 void ft_release_dongles(t_coder *coder, t_data *data);
 
 // create_mutex
-void ft_inti_mutex_dongle_coder(t_data *data);
+void ft_init_mutex_dongle_coder(t_data *data);
 void ft_init_mutex(t_data *data);
 
 // management_time

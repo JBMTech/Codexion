@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "codexion.h"
+#include "include/codexion.h"
 
 // Añadir a queue
 int ft_add_to_queue(t_coder *coder_to_add, t_queue *queue)
@@ -60,7 +60,7 @@ void ft_fifo_manager_queue(t_data *data, t_coder *coder)
         if ((ft_get_active_program(data) == 1) && data->queue_coders.first == coder)
         {
             pthread_mutex_unlock(&data->queue_coders.lock);
-            usleep(800);
+            usleep(1000);
             pthread_mutex_lock(&data->queue_coders.lock);
         }
         else

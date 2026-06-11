@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "codexion.h"
+#include "include/codexion.h"
 
 void *ft_coder_thread(void *arg)
 {
@@ -21,10 +21,10 @@ void *ft_coder_thread(void *arg)
     {
         if (ft_is_fifo(coder->data))
             ft_scheduler_fifo(coder->data, coder, ADD);
-        else if (is_dfe(coder->data))
+        else if (ft_is_dfe(coder->data))
             // scheduler_edf
         ft_life_cycle(coder, COMP);
-        if (is_fifo(coder->data))
+        if (ft_is_fifo(coder->data))
             ft_scheduler_fifo(coder->data, coder, REMOVE);
         ft_life_cycle(coder, DEBUG);
         ft_life_cycle(coder, REFACT);

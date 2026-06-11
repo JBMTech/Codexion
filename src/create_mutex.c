@@ -10,9 +10,9 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "codexion.h"
+#include "include/codexion.h"
 
-void ft_inti_mutex_dongle_coder(t_data *data)
+void ft_init_mutex_dongle_coder(t_data *data)
 {
     int index;
 
@@ -21,11 +21,15 @@ void ft_inti_mutex_dongle_coder(t_data *data)
     {
         pthread_mutex_init(&data->coders[index].lock_burnout, NULL);
         pthread_mutex_init(&data->dongles[index].lock_cooldown, NULL);
+        index++;
     }
 }
 
 void ft_init_mutex(t_data *data)
 {
     pthread_mutex_init(&data->lock_program, NULL);
-    init_mutex_dongle_coder(&data);
+    pthread_mutex_init(&data->queue_coders.lock, NULL);
+    pthread_mutex_init(&data->lock_print, NULL);
+
+    ft_init_mutex_dongle_coder(data);
 }

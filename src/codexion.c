@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "codexion.h"
+#include "include/codexion.h"
 
 int main(int argc, char **argv)
 {
@@ -24,8 +24,9 @@ int main(int argc, char **argv)
         return (1);
     }
     ft_generated_data(&data, argv);
-    ft_inti_mutex_dongle_coder(&data);
+    ft_init_mutex(&data);
     ft_create_thread(&data);
+    ft_join_thread(&data);
 
     return (0);
 }

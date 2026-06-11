@@ -10,12 +10,12 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "codexion.h"
+#include "include/codexion.h"
 
 void ft_set_burnout(t_coder *coder)
 {
     pthread_mutex_lock(&coder->lock_burnout);
-    coder->time_burnout = get_time_ms();
+    coder->time_burnout = ft_get_time_ms();
     pthread_mutex_unlock(&coder->lock_burnout);
 }
 
