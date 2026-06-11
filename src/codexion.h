@@ -1,3 +1,14 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   codexion.h                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jabuleje <jabuleje@student.42madrid.c      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/06/11 11:54:23 by jabuleje          #+#    #+#             */
+/*   Updated: 2026/06/11 11:54:27 by jabuleje         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #ifndef CODEXION_H
 # define CODEXION_H
@@ -90,50 +101,51 @@ int ft_valid_scheduler(char *scheduler);
 int ft_parser_args(char **argv);
 void ft_generated_data(t_data *data, char **argv);
 
-// init_struct
-void ft_init_data(t_data *data);
-void ft_init_coders(t_data *data);
-void ft_init_dongles(t_data *data);
-void ft_assign_dongles(t_data *data);
-
-
 // getter
-int	get_active_program(t_data *data);
-long long get_burnout(t_coder *coder);
-
+int	ft_get_active_program(t_data *data);
+long long ft_get_burnout(t_coder *coder);
 
 // init_thread
-void	create_thread(t_data *data);
-
+void ft_create_thread(t_data *data);
 
 // monitoring
-void *checker_program(void *arg);
-int check_burnout(t_data *data);
+void *ft_checker_program(void *arg);
+int ft_check_burnout(t_data *data);
+void ft_stop_program(t_data *data);
 
 // coder
-void    *coder_thread(void *arg);
+void *ft_coder_thread(void *arg);
+int *ft_life_cycle(t_coder *coder, char *status);
 
 // check_schuduler
-int is_fifo(t_data *data);
-int is_dfe(t_data *data);
+int ft_is_fifo(t_data *data);
+int ft_is_dfe(t_data *data);
+
+// check_dongle
+int ft_take_dongle(t_dongle *dongle, t_data *data);
+int ft_check_take_dongle(t_coder *coder);
+void ft_release_dongles(t_coder *coder, t_data *data);
 
 // create_mutex
-void inti_mutex_dongle_coder(t_data *data);
-void init_mutex(t_data *data);
+void ft_inti_mutex_dongle_coder(t_data *data);
+void ft_init_mutex(t_data *data);
 
 // management_time
-long long get_time_ms(void);
-long long get_start_time(t_data *data);
+long long ft_get_time_ms(void);
+long long ft_get_start_time(t_data *data);
 
 // management_queue
-int add_to_queue(t_coder *coder_to_add, t_queue *queue);
-int remove_from_queue(t_queue *queue);
-void fifo_manager_queue(t_data *data, t_coder *coder);
-int scheduler_fifo(t_data *data, t_coder *coder, char *action);
-
+int ft_add_to_queue(t_coder *coder_to_add, t_queue *queue);
+int ft_remove_from_queue(t_queue *queue);
+void ft_fifo_manager_queue(t_data *data, t_coder *coder);
+int ft_scheduler_fifo(t_data *data, t_coder *coder, char *action);
 
 // setter
-void set_burnout(t_coder *coder);
-void set_finished(t_coder *coder);
+void ft_set_burnout(t_coder *coder);
+void ft_set_finished(t_coder *coder);
+
+// log
+void ft_print_msg(void);
+void ft_print_log(t_data *data, char *status, int coder_id);
 
 #endif

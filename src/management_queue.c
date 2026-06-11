@@ -1,8 +1,19 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   management_queue.c                                 :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jabuleje <jabuleje@student.42madrid.c      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/06/11 11:58:06 by jabuleje          #+#    #+#             */
+/*   Updated: 2026/06/11 11:58:08 by jabuleje         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "codexion.h"
 
 // Añadir a queue
-int add_to_queue(t_coder *coder_to_add, t_queue *queue)
+int ft_add_to_queue(t_coder *coder_to_add, t_queue *queue)
 {
     t_nodo_coder *node;
 
@@ -25,7 +36,7 @@ int add_to_queue(t_coder *coder_to_add, t_queue *queue)
 }
 
 // Remover de queue
-int remove_from_queue(t_queue *queue)
+int ft_remove_from_queue(t_queue *queue)
 {
     t_nodo_coder *tmp;
 
@@ -40,12 +51,13 @@ int remove_from_queue(t_queue *queue)
 }
 
 // Manejamos el Queue de Coders
-void fifo_manager_queue(t_data *data, t_coder *coder)
+void ft_fifo_manager_queue(t_data *data, t_coder *coder)
 {
-    add_to_queue(coder, &data->queue_coders);
-    while ((get_active_program(data) == 1) && (data->queue_coders.first != coder) || take_dongle(coder) == 1)
+    ft_add_to_queue(coder, &data->queue_coders);
+    while ((ft_get_active_program(data) == 1) && 
+    (data->queue_coders.first != coder) || ft_check_take_dongle(coder) == 1)
     {
-        if ((get_active_program(data) == 1) && data->queue_coders.first == coder)
+        if ((ft_get_active_program(data) == 1) && data->queue_coders.first == coder)
         {
             pthread_mutex_unlock(&data->queue_coders.lock);
             usleep(800);
@@ -57,14 +69,14 @@ void fifo_manager_queue(t_data *data, t_coder *coder)
 }
 
 // Generamos FIFO
-int scheduler_fifo(t_data *data, t_coder *coder, char *action)
+int ft_scheduler_fifo(t_data *data, t_coder *coder, char *action)
 {
     pthread_mutex_lock(&data->queue_coders.lock);
     if (strcmp(action, ADD) == 0)
-        fifo_manager_queue(data, coder);
+        ft_fifo_manager_queue(data, coder);
     else if (strcmp(action, REMOVE) == 0)
     {
-        remove_from_queue(&data->queue_coders);
+        ft_remove_from_queue(&data->queue_coders);
         pthread_cond_broadcast(&data->queue_coders.cond);
     }
     pthread_mutex_unlock(&data->queue_coders.lock);

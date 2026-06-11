@@ -1,8 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   check_dongle.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jabuleje <jabuleje@student.42madrid.c      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/06/11 11:53:13 by jabuleje          #+#    #+#             */
+/*   Updated: 2026/06/11 11:53:16 by jabuleje         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "codexion.h"
 
-
-int take_dongle(t_dongle *dongle, t_data *data)
+int ft_take_dongle(t_dongle *dongle, t_data *data)
 {
     pthread_mutex_lock(&dongle->lock_cooldown);
     if (get_start_time(data) >= dongle->cooldown)
@@ -11,14 +21,14 @@ int take_dongle(t_dongle *dongle, t_data *data)
     return (1);
 }
 
-int check_take_dongle(t_coder *coder)
+int ft_check_take_dongle(t_coder *coder)
 {
-    if (take_dongle(coder->left_dongle, coder->data) == 0)
+    if (ft_take_dongle(coder->left_dongle, coder->data) == 0)
     {
-        if (take_dongle(coder->right_dongle, coder->data) == 0)
+        if (ft_take_dongle(coder->right_dongle, coder->data) == 0)
         {
-            // Print(left_dongle)
-            // Print(right_dongle)
+            ft_print_log(coder->data, TAKE, coder->coder_id);
+            ft_print_log(coder->data, TAKE, coder->coder_id);
             return (0);
         }
         else if (coder->left_dongle == NULL)
@@ -35,18 +45,18 @@ int check_take_dongle(t_coder *coder)
     }
 }
 
-void    release_dongles(t_coder *coder, t_data *data)
+void ft_release_dongles(t_coder *coder, t_data *data)
 {
     long long time_actual;
 
-    time_actual = get_start_time(data);
+    time_actual = ft_get_start_time(data);
     coder->left_dongle->cooldown = time_actual + data->dongle_cooldown;
     if (coder->right_dongle != NULL)
         coder->right_dongle->cooldown = time_actual+ data->dongle_cooldown;
     pthread_mutex_unlock(&coder->left_dongle->lock_cooldown);
     if (coder->right_dongle != NULL)
         pthread_mutex_unlock(&coder->right_dongle->lock_cooldown);
-    if (is_fifo(data))
+    if (ft_is_fifo(data))
     {
         // Bloqueamos la cola.
 		pthread_mutex_lock(&data->queue_coders.lock);
@@ -57,7 +67,7 @@ void    release_dongles(t_coder *coder, t_data *data)
 		// Liberamos el mutex.
 		pthread_mutex_unlock(&data->queue_coders.lock);
     }
-    else if (is_dfe(data))
+    else if (ft_is_dfe(data))
     {
 
     }
