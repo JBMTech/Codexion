@@ -20,7 +20,7 @@ void ft_create_thread(t_data *data)
     pthread_create(&data->checker_id, NULL, ft_checker_program, data);
     while (data->number_coders != index)
     {
-        pthread_create(&data->coders[index].thread_id, NULL, ft_coder_thread, &data->coders[index]);
+        pthread_create(&data->coder[index].thread_id, NULL, ft_coder_thread, &data->coder[index]);
         index++;
     }
 }
@@ -33,7 +33,7 @@ void    ft_join_thread(t_data *data)
 	pthread_join(data->checker_id, NULL);
 	while (index != data->number_coders)
 	{
-		pthread_join(data->coders[index].thread_id, NULL);
+		pthread_join(data->coder[index].thread_id, NULL);
 		index++;
 	}
 }

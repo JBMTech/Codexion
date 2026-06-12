@@ -54,10 +54,9 @@ int ft_remove_from_queue(t_queue *queue)
 void ft_fifo_manager_queue(t_data *data, t_coder *coder)
 {
     ft_add_to_queue(coder, &data->queue_coders);
-    while ((ft_get_active_program(data) == 1) && 
-    (data->queue_coders.first != coder) || ft_check_take_dongle(coder) == 1)
+    while (ft_get_active_program(data) == 1 && ((data->queue_coders.first->coder != coder) || ft_check_take_dongle(coder) == 1))
     {
-        if ((ft_get_active_program(data) == 1) && data->queue_coders.first == coder)
+        if ((ft_get_active_program(data) == 1) && data->queue_coders.first->coder == coder)
         {
             pthread_mutex_unlock(&data->queue_coders.lock);
             usleep(1000);

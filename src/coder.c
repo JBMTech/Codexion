@@ -17,6 +17,8 @@ void *ft_coder_thread(void *arg)
     t_coder *coder;
 
     coder = (t_coder *)arg;
+    printf("coder = %p\n", (void *)coder);
+    printf("coder->data = %p\n", (void *)coder->data);
     while ((ft_get_active_program(coder->data) == 1) && coder->coder_finished == 0)
     {
         if (ft_is_fifo(coder->data))

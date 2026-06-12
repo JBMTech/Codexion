@@ -44,13 +44,13 @@ int ft_check_burnout(t_data *data, int *finished)
     index = 0;
     while (data->number_coders != index)
     {
-        if (ft_get_active_program(&data->coders[index]) == 1)
+        if (ft_get_have_finished(&data->coder[index]) == 1)
             (*finished)++;
-        if ((ft_get_time_ms() - ft_get_burnout(&data->coders[index])) 
+        if ((ft_get_time_ms() - ft_get_burnout(&data->coder[index])) 
             > data->time_burnout)
         {
             ft_stop_program(data);
-            ft_print_log(data, BURN, data->coders[index].coder_id);
+            ft_print_log(data, BURN, data->coder[index].coder_id);
             return (1);
         }
         index++;
@@ -61,9 +61,10 @@ int ft_check_burnout(t_data *data, int *finished)
 void ft_stop_program(t_data *data)
 {
     pthread_mutex_lock(&data->lock_program);
-	data->active_program = 0;
-	pthread_mutex_unlock(&data->lock_print);
-	pthread_mutex_lock(&data->queue_coders.lock);
-	pthread_cond_broadcast(&data->queue_coders.cond);
-	pthread_mutex_unlock(&data->queue_coders.lock);
+    data->active_program = 0;
+    pthread_mutex_unlock(&data->lock_program);
+
+    pthread_mutex_lock(&data->queue_coders.lock);
+    pthread_cond_broadcast(&data->queue_coders.cond);
+    pthread_mutex_unlock(&data->queue_coders.lock);
 }

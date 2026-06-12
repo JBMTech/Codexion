@@ -27,7 +27,7 @@ void ft_print_log(t_data *data, char *status, int coder_id)
     long long time;
 
     pthread_mutex_lock(&data->lock_print);
-    time = get_time_ms() - data->time_start;
+    time = ft_get_time_ms() - data->time_start;
     if (strcmp(status, TAKE) == 0)
 		printf("[%lld] Coder %d has taken a dongle", time, coder_id);
 	else if (strcmp(status, COMP) == 0)

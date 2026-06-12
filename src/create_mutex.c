@@ -19,8 +19,9 @@ void ft_init_mutex_dongle_coder(t_data *data)
     index = 0;
     while (data->number_coders != index)
     {
-        pthread_mutex_init(&data->coders[index].lock_burnout, NULL);
-        pthread_mutex_init(&data->dongles[index].lock_cooldown, NULL);
+        pthread_mutex_init(&data->coder[index].lock_burnout, NULL);
+        pthread_mutex_init(&data->dongle[index].lock_cooldown, NULL);
+        pthread_mutex_init(&data->coder[index].lock_finished, NULL);
         index++;
     }
 }

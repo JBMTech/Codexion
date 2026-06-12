@@ -16,6 +16,7 @@ int main(int argc, char **argv)
 {
     t_data data;
 
+    memset(&data, 0, sizeof(t_data));
     if (argc != 9)
         ft_print_msg();
     if (!ft_parser_args(argv))
@@ -23,7 +24,12 @@ int main(int argc, char **argv)
         printf("[ERROR]: Invalid arguments\n");
         return (1);
     }
-    ft_generated_data(&data, argv);
+    if (!ft_generated_data(&data, argv))
+    {
+        printf("[ERROR]: malloc error\n");
+        return (1);
+    }
+    ft_init_data(&data);
     ft_init_mutex(&data);
     ft_create_thread(&data);
     ft_join_thread(&data);

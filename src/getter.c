@@ -33,3 +33,14 @@ long long ft_get_burnout(t_coder *coder)
     pthread_mutex_unlock(&coder->lock_burnout);
     return (burnout);
 }
+
+int	ft_get_have_finished(t_coder *coder)
+{
+	int	finished;
+
+	finished = 0;
+	pthread_mutex_lock(&coder->lock_finished);
+	finished = coder->coder_finished;
+	pthread_mutex_unlock(&coder->lock_finished);
+	return (finished);
+}

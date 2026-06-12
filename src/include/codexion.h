@@ -59,7 +59,6 @@ typedef struct s_queue
 
 typedef struct s_dongle
 {
-	int				dongle_id;
 	long long		cooldown;
 	t_data			*data;
 	pthread_mutex_t	lock_cooldown;
@@ -93,8 +92,8 @@ typedef struct s_data
 	int				dongle_cooldown;
 	char			*scheduler;
 
-	t_coder			*coders;
-	t_dongle		*dongles;
+	t_coder			*coder;
+	t_dongle		*dongle;
 	pthread_t		checker_id;
 	pthread_mutex_t	lock_program;
 	pthread_mutex_t	lock_print;
@@ -106,21 +105,22 @@ int ft_is_number(char *str);
 char *ft_tolower(char *str);
 int ft_valid_scheduler(char *scheduler);
 int ft_parser_args(char **argv);
-void ft_generated_data(t_data *data, char **argv);
+int ft_generated_data(t_data *data, char **argv);
 
 //
 
 // getter
 int	ft_get_active_program(t_data *data);
 long long ft_get_burnout(t_coder *coder);
+int	ft_get_have_finished(t_coder *coder);
 
 // init_thread
 void ft_create_thread(t_data *data);
-void    ft_join_thread(t_data *data);
+void ft_join_thread(t_data *data);
 
 // monitoring
 void *ft_checker_program(void *arg);
-int ft_check_burnout(t_data *data);
+int ft_check_burnout(t_data *data, int *finished);
 void ft_stop_program(t_data *data);
 
 // coder
@@ -157,5 +157,11 @@ void ft_set_finished(t_coder *coder);
 // log
 void ft_print_msg(void);
 void ft_print_log(t_data *data, char *status, int coder_id);
+
+// init_proyect
+void ft_init_data(t_data *data);
+void ft_create_coders_and_dongles(t_data *data);
+void ft_init_coders(t_data *data, t_coder *coder, int count);
+void ft_init_basic_data_coders(t_data *data, t_coder *coder, int nbr_coder);
 
 #endif

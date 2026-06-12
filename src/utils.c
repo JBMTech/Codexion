@@ -73,9 +73,22 @@ int ft_parser_args(char **argv)
     return (1);
 }
 
-void ft_generated_data(t_data *data, char **argv)
+int ft_generated_data(t_data *data, char **argv)
 {
-    data->number_coders = atoi(argv[1]);
+    int n;
+
+    n = atoi(argv[1]);
+    data->coder = malloc(sizeof(t_coder) * n);
+    if (!data->coder)
+        return (0);
+
+    data->dongle = malloc(sizeof(t_dongle) * n);
+    if (!data->dongle)
+    {
+        free(data->coder);
+        return (0);
+    }
+    data->number_coders = n;
     data->time_burnout = atoi(argv[2]);
     data->time_compile = atoi(argv[3]);
     data->time_debug = atoi(argv[4]);
@@ -83,4 +96,5 @@ void ft_generated_data(t_data *data, char **argv)
     data->number_compiles_required = atoi(argv[6]);
     data->dongle_cooldown = atoi(argv[7]);
     data->scheduler = argv[8];
+    return (1);
 }

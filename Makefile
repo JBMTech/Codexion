@@ -19,6 +19,7 @@ FILES		= codexion.c \
 			  coder.c \
 			  create_mutex.c \
 			  getter.c \
+			  init_proyect.c \
 			  setter.c \
 			  init_thread.c \
 			  monitoring.c \
