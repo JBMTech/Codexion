@@ -67,10 +67,6 @@ void ft_release_dongles(t_coder *coder, t_data *data)
 		// Liberamos el mutex.
 		pthread_mutex_unlock(&data->queue_coders.lock);
     }
-    else if (ft_is_dfe(data))
-    {
-
-    }
 }
 
 // void	release_dongles(t_coder *coder, t_data *data)
