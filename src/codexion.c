@@ -16,7 +16,6 @@ int main(int argc, char **argv)
 {
     t_data data;
 
-    memset(&data, 0, sizeof(t_data));
     if (argc != 9)
         ft_print_msg();
     if (!ft_parser_args(argv))
@@ -24,6 +23,7 @@ int main(int argc, char **argv)
         printf("[ERROR]: Invalid arguments\n");
         return (1);
     }
+    memset(&data, 0, sizeof(t_data));
     if (!ft_generated_data(&data, argv))
     {
         printf("[ERROR]: malloc error\n");

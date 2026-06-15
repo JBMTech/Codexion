@@ -30,7 +30,7 @@ void *ft_checker_program(void *arg)
             pthread_mutex_unlock(&data->lock_print);
             return (NULL);
         }
-        usleep(100);
+        usleep(7);
     }
     return (NULL);
     

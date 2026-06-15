@@ -100,7 +100,7 @@ typedef struct s_data
 	t_queue			queue_coders;
 }	t_data;
 
-// utils
+// init_parser
 int ft_is_number(char *str);
 char *ft_tolower(char *str);
 int ft_valid_scheduler(char *scheduler);

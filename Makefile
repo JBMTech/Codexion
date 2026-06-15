@@ -1,3 +1,14 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    Makefile                                           :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: jabuleje <jabuleje@student.42madrid.c      +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2026/06/15 10:40:56 by jabuleje          #+#    #+#              #
+#    Updated: 2026/06/15 10:41:00 by jabuleje         ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
 
 GREEN	= \033[0;32m
 YELLOW	= \033[0;33m
@@ -8,7 +19,7 @@ RESET	= \033[0m
 NAME		= codexion
 
 CC			= cc
-CFLAGS		= -Wall -Wextra -Werror -g -pthread
+CFLAGS		= -Wall -Wextra -Werror -pthread
 
 SRCS_DIR	= src
 OBJ_DIR		= obj
@@ -26,7 +37,7 @@ FILES		= codexion.c \
 			  log.c \
 			  management_queue.c \
 			  management_time.c \
-			  utils.c
+			  init_parser.c
 
 SRCS		= $(addprefix $(SRCS_DIR)/,$(FILES))
 OBJS		= $(addprefix $(OBJ_DIR)/,$(FILES:.c=.o))

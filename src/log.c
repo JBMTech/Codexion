@@ -14,12 +14,12 @@
 
 void ft_print_msg(void) 
  {
+    printf("[ERROR]: Parameters are missing\n");
     printf("Usage: ./codexion ");
     printf("<number_coders> <time_burnout> <time_compile> ");
     printf("<time_debug> <time_refactor> ");
     printf("<number_compiles_required> ");
     printf("<dongle_cooldown> <scheduler>\n");
-    printf("[ERROR]: Parameters are missing\n");
 }
 
 void ft_print_log(t_data *data, char *status, int coder_id)
