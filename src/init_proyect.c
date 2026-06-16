@@ -17,8 +17,8 @@ void ft_init_data(t_data *data)
 {
     data->active_program = 1;
 	data->time_start = ft_get_time_ms();
-	data->queue_coders.first = NULL;
-	data->queue_coders.last = NULL;
+	data->dongle->queue_coders.first = NULL;
+	data->dongle->queue_coders.last = NULL;
 	ft_create_coders_and_dongles(data);
 }
 

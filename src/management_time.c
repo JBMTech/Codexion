@@ -20,7 +20,7 @@ long long ft_get_time_ms(void)
     return ((time.tv_sec * 1000) + (time.tv_usec / 1000));
 }
 
-long long ft_get_start_time(t_data *data)
+long long ft_get_now_time(t_data *data)
 {
     return (ft_get_time_ms() - data->time_start);
 }

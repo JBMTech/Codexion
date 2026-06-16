@@ -12,59 +12,71 @@
 
 #include "include/codexion.h"
 
-int ft_take_dongle(t_dongle *dongle, t_data *data)
+void ft_request_dongles(t_coder *coder)
 {
-    pthread_mutex_lock(&dongle->lock_cooldown);
-    if (ft_get_start_time(data) >= dongle->cooldown)
+    ft_add_to_queue(coder, &coder->left_dongle->queue_coders);
+    ft_add_to_queue(coder, &coder->right_dongle->queue_coders);
+}
+
+int ft_dongles_available(t_coder *coder)
+{
+    long long now;
+    
+    now = ft_get_now_time(coder->data);
+    if (now < coder->left_dongle->cooldown)
         return (0);
-    pthread_mutex_unlock(&dongle->lock_cooldown);
+    if (now < coder->right_dongle->cooldown)
+        return (0);
     return (1);
 }
 
-int ft_check_take_dongle(t_coder *coder)
+int ft_is_first_both_queue(t_coder *coder)
 {
-    if (ft_take_dongle(coder->left_dongle, coder->data) == 0)
-    {
-        if (ft_take_dongle(coder->right_dongle, coder->data) == 0)
-        {
-            ft_print_log(coder->data, TAKE, coder->coder_id);
-            ft_print_log(coder->data, TAKE, coder->coder_id);
-            return (0);
-        }
-        else if (coder->left_dongle == NULL)
-        {
-            pthread_mutex_lock(&coder->left_dongle->lock_cooldown);
-            return (1);
-        }
-        else
-        {
-            pthread_mutex_unlock(&coder->left_dongle->lock_cooldown);
-            return (1);
-        }
-    }
-    return (1);
+    t_dongle *left;
+    t_dongle *right;
+    int result;
+
+    left = coder->left_dongle;
+    right = coder->right_dongle;
+    result = 0;
+    pthread_mutex_lock(&left->queue_coders.lock);
+    pthread_mutex_lock(&right->queue_coders.lock);
+
+    if (left->queue_coders.first &&
+        right->queue_coders.first &&
+        left->queue_coders.first->coder == coder &&
+        right->queue_coders.first->coder == coder)
+        result = 1;
+
+    pthread_mutex_unlock(&right->queue_coders.lock);
+    pthread_mutex_unlock(&left->queue_coders.lock);
+
+    return result;
 }
 
 void ft_release_dongles(t_coder *coder, t_data *data)
 {
-    long long time_actual;
+    long long now;
+    t_dongle *left;
+    t_dongle *right;
 
-    time_actual = ft_get_start_time(data);
-    coder->left_dongle->cooldown = time_actual + data->dongle_cooldown;
-    if (coder->right_dongle != NULL)
-        coder->right_dongle->cooldown = time_actual+ data->dongle_cooldown;
-    pthread_mutex_unlock(&coder->left_dongle->lock_cooldown);
-    if (coder->right_dongle != NULL)
-        pthread_mutex_unlock(&coder->right_dongle->lock_cooldown);
-    if (ft_is_fifo(data))
-    {
-        // Bloqueamos la cola.
-		pthread_mutex_lock(&data->queue_coders.lock);
+    right = coder->right_dongle;
+    left = coder->left_dongle;
+    now = ft_get_now_time(data);
+    // 1. actualizar disponibilidad
+    pthread_mutex_lock(&left->lock_cooldown);
+    left->cooldown = now + data->dongle_cooldown;
+    pthread_mutex_unlock(&left->lock_cooldown);
 
-		// Despertamos a TODOS los coders que estén esperando.
-		pthread_cond_broadcast(&data->queue_coders.cond);
+    pthread_mutex_lock(&right->lock_cooldown);
+    right->cooldown = now + data->dongle_cooldown;
+    pthread_mutex_unlock(&right->lock_cooldown);
+    // 2. despertar a todos los que están esperando en ambas colas
+    pthread_mutex_lock(&left->queue_coders.lock);
+    pthread_cond_broadcast(&left->queue_coders.cond);
+    pthread_mutex_unlock(&left->queue_coders.lock);
 
-		// Liberamos el mutex.
-		pthread_mutex_unlock(&data->queue_coders.lock);
-    }
+    pthread_mutex_lock(&right->queue_coders.lock);
+    pthread_cond_broadcast(&right->queue_coders.cond);
+    pthread_mutex_unlock(&right->queue_coders.lock);
 }

@@ -20,7 +20,7 @@ void ft_create_thread(t_data *data)
     pthread_create(&data->checker_id, NULL, ft_checker_program, data);
     while (data->number_coders != index)
     {
-        pthread_create(&data->coder[index].thread_id, NULL, ft_coder_thread, &data->coder[index]);
+        pthread_create(&data->coder[index].thread_id, NULL, ft_coder_routine, &data->coder[index]);
         index++;
     }
 }

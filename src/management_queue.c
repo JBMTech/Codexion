@@ -35,49 +35,41 @@ int ft_add_to_queue(t_coder *coder_to_add, t_queue *queue)
     return (0);
 }
 
-// Remover de queue
-int ft_remove_from_queue(t_queue *queue)
+void ft_remove_from_queue(t_queue *queue, t_coder *coder)
 {
-    t_nodo_coder *tmp;
+    t_nodo_coder *prev = NULL;
+    t_nodo_coder *curr = queue->first;
 
-    if (queue->first == NULL)
-        return (1);
-    tmp = queue->first;
-    queue->first = tmp->next;
-    if (queue->first == NULL)
-        queue->last = NULL;
-    free (tmp);
-    return (0);
-}
-
-// Manejamos el Queue de Coders
-void ft_fifo_manager_queue(t_data *data, t_coder *coder)
-{
-    ft_add_to_queue(coder, &data->queue_coders);
-    while (ft_get_active_program(data) == 1 && ((data->queue_coders.first->coder != coder) || ft_check_take_dongle(coder) == 1))
+    while (curr)
     {
-        if ((ft_get_active_program(data) == 1) && data->queue_coders.first->coder == coder)
+        if (curr->coder == coder)
         {
-            pthread_mutex_unlock(&data->queue_coders.lock);
-            usleep(1000);
-            pthread_mutex_lock(&data->queue_coders.lock);
+            if (prev)
+                prev->next = curr->next;
+            else
+                queue->first = curr->next;
+
+            if (queue->last == curr)
+                queue->last = prev;
+
+            free(curr);
+            return;
         }
-        else
-            pthread_cond_wait(&data->queue_coders.cond, &data->queue_coders.lock);
+        prev = curr;
+        curr = curr->next;
     }
 }
 
-// Generamos FIFO
-int ft_scheduler_fifo(t_data *data, t_coder *coder, char *action)
+void ft_remove_from_dongle_queue(t_coder *coder)
 {
-    pthread_mutex_lock(&data->queue_coders.lock);
-    if (strcmp(action, ADD) == 0)
-        ft_fifo_manager_queue(data, coder);
-    else if (strcmp(action, REMOVE) == 0)
-    {
-        ft_remove_from_queue(&data->queue_coders);
-        pthread_cond_broadcast(&data->queue_coders.cond);
-    }
-    pthread_mutex_unlock(&data->queue_coders.lock);
-    return (0);
+    t_dongle *left = coder->left_dongle;
+    t_dongle *right = coder->right_dongle;
+
+    pthread_mutex_lock(&left->queue_coders.lock);
+    ft_remove_from_queue(&left->queue_coders, coder);
+    pthread_mutex_unlock(&left->queue_coders.lock);
+
+    pthread_mutex_lock(&right->queue_coders.lock);
+    ft_remove_from_queue(&right->queue_coders, coder);
+    pthread_mutex_unlock(&right->queue_coders.lock);
 }

@@ -12,7 +12,48 @@
 
 #include "include/codexion.h"
 
-void *ft_coder_thread(void *arg)
+
+
+void ft_wait_for_turn(t_coder *coder)
+{
+    while (ft_get_active_program(coder->data))
+    {
+        if (ft_is_first_both_queue(coder) &&
+            ft_dongles_available(coder))
+            return;
+        usleep(8);
+    }
+}
+
+
+
+void ft_compile(t_coder *coder)
+{
+    ft_set_burnout(coder);
+    ft_print_log(coder->data, COMP, coder->coder_id);
+    usleep(coder->data->time_compile * 1000);
+
+    coder->coder_compiled += 1;
+
+    if (coder->coder_compiled >= coder->data->number_compiles_required)
+        ft_set_finished(coder);
+}
+
+void ft_debug(t_coder *coder)
+{
+    ft_print_log(coder->data, DEBUG, coder->coder_id);
+    usleep(coder->data->time_debug * 1000);
+}
+
+void ft_refract(t_coder *coder)
+{
+    ft_print_log(coder->data, REFACT, coder->coder_id);
+    usleep(coder->data->time_refactor * 1000);
+}
+
+
+
+void *ft_coder_routine(void *arg)
 {
     t_coder *coder;
 
@@ -20,41 +61,21 @@ void *ft_coder_thread(void *arg)
     while ((ft_get_active_program(coder->data) == 1) && coder->coder_finished == 0)
     {
         if (ft_is_fifo(coder->data))
-            ft_scheduler_fifo(coder->data, coder, ADD);
-        // else if (ft_is_dfe(coder->data))
-            // scheduler_edf
-        ft_life_cycle(coder, COMP);
-        if (ft_is_fifo(coder->data))
-            ft_scheduler_fifo(coder->data, coder, REMOVE);
-        ft_life_cycle(coder, DEBUG);
-        ft_life_cycle(coder, REFACT);
+        {
+            ft_request_dongles(coder);
+            ft_wait_for_turn(coder);
+            if (!ft_get_active_program(coder->data))
+                break;
+            ft_print_log(coder->data, TAKE, coder->coder_id);
+            ft_print_log(coder->data, TAKE, coder->coder_id);
+            ft_compile(coder);
+            ft_release_dongles(coder, coder->data);
+            ft_remove_from_dongle_queue(coder);
+            if (!ft_get_active_program(coder->data))
+                break;
+            ft_debug(coder);
+            ft_refract(coder);
+        }
     }
     return (NULL);
-}
-
-int *ft_life_cycle(t_coder *coder, char *status)
-{
-    if (ft_get_active_program(coder->data) == 0)
-        return (NULL);
-    else if (strcmp(status, COMP) == 0)
-    {
-        ft_set_burnout(coder);
-        ft_print_log(coder->data, COMP, coder->coder_id);
-        usleep(coder->data->time_compile * 1000);
-        coder->coder_compiled += 1;
-        if (coder->coder_compiled >= coder->data->number_compiles_required)
-            ft_set_finished(coder);
-        ft_release_dongles(coder, coder->data);
-    }
-    else if (strcmp(status, DEBUG) == 0)
-    {
-        ft_print_log(coder->data, DEBUG, coder->coder_id);
-        usleep(coder->data->time_debug * 1000);
-    }
-    else if (strcmp(status, REFACT) == 0)
-    {
-        ft_print_log(coder->data, REFACT, coder->coder_id);
-        usleep(coder->data->time_refactor * 1000);
-    }
-    return (0);
 }

@@ -28,7 +28,7 @@ FILES		= codexion.c \
 			  check_dongle.c \
 			  check_scheduler.c \
 			  coder.c \
-			  create_mutex.c \
+			  init_mutex.c \
 			  getter.c \
 			  init_proyect.c \
 			  setter.c \

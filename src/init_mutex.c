@@ -29,7 +29,7 @@ void ft_init_mutex_dongle_coder(t_data *data)
 void ft_init_mutex(t_data *data)
 {
     pthread_mutex_init(&data->lock_program, NULL);
-    pthread_mutex_init(&data->queue_coders.lock, NULL);
+    pthread_mutex_init(&data->dongle->queue_coders.lock, NULL);
     pthread_mutex_init(&data->lock_print, NULL);
 
     ft_init_mutex_dongle_coder(data);
