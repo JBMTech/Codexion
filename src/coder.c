@@ -14,18 +14,16 @@
 
 
 
-void ft_wait_for_turn(t_coder *coder)
+int ft_wait_for_turn(t_coder *coder)
 {
     while (ft_get_active_program(coder->data))
     {
         if (ft_is_first_both_queue(coder) &&
             ft_dongles_available(coder))
-            return;
-        usleep(8);
+            return (1);
     }
+    return (0);
 }
-
-
 
 void ft_compile(t_coder *coder)
 {
@@ -48,7 +46,7 @@ void ft_debug(t_coder *coder)
 void ft_refract(t_coder *coder)
 {
     ft_print_log(coder->data, REFACT, coder->coder_id);
-    usleep(coder->data->time_refactor * 1000);
+    usleep(coder->data->time_debug * 1000);
 }
 
 
@@ -63,16 +61,14 @@ void *ft_coder_routine(void *arg)
         if (ft_is_fifo(coder->data))
         {
             ft_request_dongles(coder);
-            ft_wait_for_turn(coder);
-            if (!ft_get_active_program(coder->data))
-                break;
-            ft_print_log(coder->data, TAKE, coder->coder_id);
-            ft_print_log(coder->data, TAKE, coder->coder_id);
-            ft_compile(coder);
+            if (ft_wait_for_turn(coder))
+            {
+                ft_print_log(coder->data, TAKE, coder->coder_id);
+                ft_print_log(coder->data, TAKE, coder->coder_id);
+                ft_compile(coder);
+            }
             ft_release_dongles(coder, coder->data);
             ft_remove_from_dongle_queue(coder);
-            if (!ft_get_active_program(coder->data))
-                break;
             ft_debug(coder);
             ft_refract(coder);
         }

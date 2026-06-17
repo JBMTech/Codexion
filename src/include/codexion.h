@@ -122,7 +122,7 @@ int ft_is_dfe(t_data *data);
 
 // coder
 void *ft_coder_routine(void *arg);
-void ft_wait_for_turn(t_coder *coder);
+int ft_wait_for_turn(t_coder *coder);
 void ft_compile(t_coder *coder);
 void ft_debug(t_coder *coder);
 void ft_refract(t_coder *coder);
@@ -168,8 +168,9 @@ long long ft_get_now_time(t_data *data);
 
 // monitoring
 void *ft_checker_program(void *arg);
-int ft_check_burnout(t_data *data, int *finished);
+int ft_check_burnout(t_data *data);
 void ft_stop_program(t_data *data);
+void ft_get_nbr_coder_finished(t_data *data, int *finished);
 
 // setter
 void ft_set_burnout(t_coder *coder);

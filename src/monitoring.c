@@ -20,8 +20,7 @@ void *ft_checker_program(void *arg)
     data = (t_data *)arg;
     while (ft_get_active_program(data) == 1)
     {
-        if (ft_check_burnout(data, &coder_finish) == 1)
-            return (NULL);
+        ft_get_nbr_coder_finished(data, &coder_finish);
         if (data->number_coders == coder_finish)
         {
             ft_stop_program(data);
@@ -30,17 +29,30 @@ void *ft_checker_program(void *arg)
             pthread_mutex_unlock(&data->lock_print);
             return (NULL);
         }
-        usleep(7);
+        if (ft_check_burnout(data) == 1)
+            return (NULL);
     }
     return (NULL);
-    
 }
 
-int ft_check_burnout(t_data *data, int *finished)
+void ft_get_nbr_coder_finished(t_data *data, int *finished)
 {
     int index;
 
     *finished = 0;
+    index = 0;
+    while (data->number_coders != index)
+    {
+        if (ft_get_have_finished(&data->coder[index]) == 1)
+            (*finished)++;
+        index++;
+    }
+}
+
+int ft_check_burnout(t_data *data)
+{
+    int index;
+
     index = 0;
     while (data->number_coders != index)
     {
@@ -50,12 +62,6 @@ int ft_check_burnout(t_data *data, int *finished)
             ft_stop_program(data);
             ft_print_log(data, BURN, data->coder[index].coder_id);
             return (1);
-        }
-        if (ft_get_have_finished(&data->coder[index]) == 1)
-        {
-            (*finished)++;
-            index++;
-            continue ;
         }
         index++;
     }
