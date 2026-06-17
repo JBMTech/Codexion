@@ -56,22 +56,24 @@ int ft_is_first_both_queue(t_coder *coder)
 
 void ft_release_dongles(t_coder *coder, t_data *data)
 {
-    long long now;
-    t_dongle *left;
-    t_dongle *right;
+    long long	now;
+    t_dongle	*left;
+    t_dongle	*right;
 
-    right = coder->right_dongle;
     left = coder->left_dongle;
+    right = coder->right_dongle;
     now = ft_get_now_time(data);
-    // 1. actualizar disponibilidad
+
     pthread_mutex_lock(&left->lock_cooldown);
+    left->taken = 0;
     left->cooldown = now + data->dongle_cooldown;
     pthread_mutex_unlock(&left->lock_cooldown);
 
     pthread_mutex_lock(&right->lock_cooldown);
+    right->taken = 0;
     right->cooldown = now + data->dongle_cooldown;
     pthread_mutex_unlock(&right->lock_cooldown);
-    // 2. despertar a todos los que están esperando en ambas colas
+
     pthread_mutex_lock(&left->queue_coders.lock);
     pthread_cond_broadcast(&left->queue_coders.cond);
     pthread_mutex_unlock(&left->queue_coders.lock);
