@@ -81,6 +81,8 @@ typedef struct s_coder{
     int				coder_id;
 	int				coder_compiled;
 	int				coder_finished;
+	int 			has_left;
+    int 			has_right;
 	long long		time_burnout;
 
 	t_data			*data;
@@ -115,8 +117,10 @@ typedef struct s_data
 
 // check_dongle
 void ft_request_dongles(t_coder *coder);
-int ft_dongles_available(t_coder *coder);
+int ft_dongle_is_ready(t_dongle *d);
 void ft_release_dongles(t_coder *coder, t_data *data);
+int ft_take_left_dongle(t_coder *coder);
+int ft_take_right_dongle(t_coder *coder);
 
 
 // check_schuduler
@@ -133,8 +137,7 @@ void ft_refract(t_coder *coder);
 int	ft_get_active_program(t_data *data);
 long long ft_get_burnout(t_coder *coder);
 int	ft_get_have_finished(t_coder *coder);
-int ft_get_take_left_dongle(t_coder *coder);
-int ft_get_take_right_dongle(t_coder *coder);
+
 
 // init_mutex
 void ft_init_mutex_dongle_coder(t_data *data);

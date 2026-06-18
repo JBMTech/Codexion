@@ -14,17 +14,21 @@
 
 void ft_init_mutex_dongle_coder(t_data *data)
 {
-    int index;
+    int index = 0;
 
-    index = 0;
     while (data->number_coders != index)
     {
         pthread_mutex_init(&data->coder[index].lock_burnout, NULL);
         pthread_mutex_init(&data->coder[index].lock_finished, NULL);
+
         pthread_mutex_init(&data->dongle[index].lock_cooldown, NULL);
         pthread_mutex_init(&data->dongle[index].lock_taken, NULL);
         pthread_mutex_init(&data->dongle[index].lock_queue, NULL);
+
         pthread_mutex_init(&data->dongle[index].queue_coders.lock, NULL);
+
+        pthread_cond_init(&data->dongle[index].queue_coders.cond, NULL);
+
         index++;
     }
 }

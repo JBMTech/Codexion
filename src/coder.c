@@ -54,27 +54,27 @@ void *ft_coder_routine(void *arg)
     {
         if (ft_is_fifo(coder->data))
         {
+            if (coder->coder_id % 2)
+                usleep(10);
             ft_request_dongles(coder);
-
             while (ft_get_active_program(coder->data))
             {
-                if (ft_get_take_left_dongle(coder) &&
-                    ft_get_take_right_dongle(coder))
-                    break ;
-                usleep(10);
+                if (coder->left_dongle->queue_coders.first == coder &&
+                ft_dongle_is_ready(coder->left_dongle))
+                    coder->has_left = ft_take_left_dongle(coder);
+                if (coder->right_dongle->queue_coders.first == coder &&
+                ft_dongle_is_ready(coder->right_dongle))
+                    coder->has_right = ft_take_right_dongle(coder);
+                if (coder->has_left && coder->has_right)
+                    break;
+                usleep(8);
             }
-
             if (!ft_get_active_program(coder->data))
                 break ;
-
-            ft_compile(coder);
-
-            ft_release_dongles(coder, coder->data);
-
             ft_remove_from_dongle_queue(coder);
-
+            ft_compile(coder);
+            ft_release_dongles(coder, coder->data);
             ft_debug(coder);
-
             ft_refract(coder);
         }
     }
