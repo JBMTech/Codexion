@@ -28,26 +28,8 @@ int ft_is_number(char *str)
     return (1);
 }
 
-char *ft_tolower(char *str)
-{
-    int i;
-    int difference;
-
-    i = 0;
-    difference = 'a' - 'A';
-    while (str[i])
-    {
-        if (str[i] >= 'A' && str[i] <= 'Z')
-            str[i] += difference;
-        i++;
-    }
-    return (str);
-}
-
 int ft_valid_scheduler(char *scheduler)
 {
-    ft_tolower(scheduler);
-
     if (!strcmp(scheduler, "fifo"))
         return (1);
     if (!strcmp(scheduler, "edf"))
@@ -60,7 +42,7 @@ int ft_parser_args(char **argv)
     int i;
 
     i = 1;
-    if (atoi(argv[1]) <= 1)
+    if (atoi(argv[1]) <= 0)
             return (0);
     while (i < 8)
     {

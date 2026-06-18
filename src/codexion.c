@@ -20,13 +20,13 @@ int main(int argc, char **argv)
         ft_print_msg();
     if (!ft_parser_args(argv))
     {
-        printf("[ERROR]: Invalid arguments\n");
+        printf(RED "[ERROR]: Invalid arguments\n" RESET);
         return (1);
     }
     memset(&data, 0, sizeof(t_data));
     if (!ft_generated_data(&data, argv))
     {
-        printf("[ERROR]: malloc error\n");
+        printf(RED "[ERROR]: malloc error\n" RESET);
         return (1);
     }
     ft_init_data(&data);

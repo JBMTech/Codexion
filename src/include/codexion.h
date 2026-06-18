@@ -72,6 +72,8 @@ typedef struct s_dongle
 	int				taken;
 	t_data			*data;
 	pthread_mutex_t	lock_cooldown;
+	pthread_mutex_t lock_taken;
+	pthread_mutex_t lock_queue;
 	t_queue			queue_coders;
 }	t_dongle;
 
@@ -79,8 +81,6 @@ typedef struct s_coder{
     int				coder_id;
 	int				coder_compiled;
 	int				coder_finished;
-	int				has_left;
-	int				has_right;
 	long long		time_burnout;
 
 	t_data			*data;
@@ -116,10 +116,8 @@ typedef struct s_data
 // check_dongle
 void ft_request_dongles(t_coder *coder);
 int ft_dongles_available(t_coder *coder);
-int ft_is_first_both_queue(t_coder *coder);
 void ft_release_dongles(t_coder *coder, t_data *data);
-int ft_is_right_available(t_coder *coder);
-int ft_is_left_available(t_coder *coder);
+
 
 // check_schuduler
 int ft_is_fifo(t_data *data);
@@ -127,7 +125,6 @@ int ft_is_dfe(t_data *data);
 
 // coder
 void *ft_coder_routine(void *arg);
-void ft_wait_for_turn(t_coder *coder);
 void ft_compile(t_coder *coder);
 void ft_debug(t_coder *coder);
 void ft_refract(t_coder *coder);
@@ -136,6 +133,8 @@ void ft_refract(t_coder *coder);
 int	ft_get_active_program(t_data *data);
 long long ft_get_burnout(t_coder *coder);
 int	ft_get_have_finished(t_coder *coder);
+int ft_get_take_left_dongle(t_coder *coder);
+int ft_get_take_right_dongle(t_coder *coder);
 
 // init_mutex
 void ft_init_mutex_dongle_coder(t_data *data);

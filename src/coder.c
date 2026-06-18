@@ -12,55 +12,6 @@
 
 #include "include/codexion.h"
 
-int ft_take_left_dongle(t_coder *coder)
-{
-    t_dongle *d = coder->left_dongle;
-
-    pthread_mutex_lock(&d->lock_cooldown);
-
-    if (d->taken == 1 || d->queue_coders.first->coder != coder)
-    {
-        pthread_mutex_unlock(&d->lock_cooldown);
-        return (0);
-    }
-
-    d->taken = 1;
-    pthread_mutex_unlock(&d->lock_cooldown);
-    ft_print_log(coder->data, TAKE, coder->coder_id);
-
-    return (1);
-}
-int ft_take_right_dongle(t_coder *coder)
-{
-    t_dongle *d = coder->right_dongle;
-
-    pthread_mutex_lock(&d->lock_cooldown);
-
-    if (d->taken == 1 || d->queue_coders.first->coder != coder)
-    {
-        pthread_mutex_unlock(&d->lock_cooldown);
-        return (0);
-    }
-
-    d->taken = 1;
-    pthread_mutex_unlock(&d->lock_cooldown);
-    ft_print_log(coder->data, TAKE, coder->coder_id);
-
-    return (1);
-}
-
-
-void ft_wait_for_turn(t_coder *coder)
-{
-    while (ft_get_active_program(coder->data))
-    {
-        if (ft_is_first_both_queue(coder) &&
-            ft_dongles_available(coder))
-            return;
-
-        usleep(10);
-    }
-}
 
 void ft_compile(t_coder *coder)
 {
@@ -105,14 +56,16 @@ void *ft_coder_routine(void *arg)
         {
             ft_request_dongles(coder);
 
-            ft_wait_for_turn(coder);
-
-            // intentar tomar progresivamente
-            while (!ft_take_left_dongle(coder) ||
-                !ft_take_right_dongle(coder))
+            while (ft_get_active_program(coder->data))
             {
-                usleep(8);
+                if (ft_get_take_left_dongle(coder) &&
+                    ft_get_take_right_dongle(coder))
+                    break ;
+                usleep(10);
             }
+
+            if (!ft_get_active_program(coder->data))
+                break ;
 
             ft_compile(coder);
 
@@ -121,6 +74,7 @@ void *ft_coder_routine(void *arg)
             ft_remove_from_dongle_queue(coder);
 
             ft_debug(coder);
+
             ft_refract(coder);
         }
     }
