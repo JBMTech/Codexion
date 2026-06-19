@@ -1,9 +1,9 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   coder.c                                            :+:      :+:    :+:   */
+/*   coder.coder                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jabuleje <jabuleje@student.42madrid.c      +#+  +:+       +#+        */
+/*   By: jabuleje <jabuleje@student.42madrid.coder      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/11 11:53:49 by jabuleje          #+#    #+#             */
 /*   Updated: 2026/06/11 11:53:51 by jabuleje         ###   ########.fr       */
@@ -46,32 +46,35 @@ void ft_refract(t_coder *coder)
 }
 
 
-
-
-
-
 void ft_scheduler_fifo(t_coder *coder)
 {
+    t_dongle *first;
+    t_dongle *second;
+
+    if (coder->coder_id % 2 == 0)
+    {
+        first = coder->right_dongle;
+        second = coder->left_dongle;
+    }
+    else
+    {
+        first = coder->left_dongle;
+        second = coder->right_dongle;
+    }
+
     ft_request_dongles(coder);
-            while (ft_get_active_program(coder->data))
-            {
-                if (coder->left_dongle->queue_coders.first == coder &&
-                ft_dongle_is_ready(coder->left_dongle))
-                    coder->has_left = ft_take_left_dongle(coder);
-                if (coder->right_dongle->queue_coders.first == coder &&
-                ft_dongle_is_ready(coder->right_dongle))
-                    coder->has_right = ft_take_right_dongle(coder);
-                if (coder->has_left && coder->has_right)
-                    break;
-                usleep(8);
-            }
-            // if (!ft_get_active_program(coder->data))
-            //     break ;
-            ft_remove_from_dongle_queue(coder);
-            ft_compile(coder);
-            ft_release_dongles(coder, coder->data);
-            ft_debug(coder);
-            ft_refract(coder);
+
+    ft_wait_dongle(first, coder);
+    ft_take_dongle(first, coder);
+
+    ft_wait_dongle(second, coder);
+    ft_take_dongle(second, coder);
+
+    ft_compile(coder);
+
+    ft_release_dongles(coder, coder->data);
+    ft_debug(coder);
+    ft_refract(coder);
 }
 
 
@@ -86,11 +89,7 @@ void *ft_coder_routine(void *arg)
     while ((ft_get_active_program(coder->data) == 1) && coder->coder_finished == 0)
     {
         if (ft_is_fifo(coder->data))
-        {
-            if (coder->coder_id % 2)
-                usleep(10);
             ft_scheduler_fifo(coder);
-        }
     }
     return (NULL);
 }

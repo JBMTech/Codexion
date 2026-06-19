@@ -65,11 +65,11 @@ void ft_remove_from_dongle_queue(t_coder *coder)
     t_dongle *left = coder->left_dongle;
     t_dongle *right = coder->right_dongle;
 
-    pthread_mutex_lock(&left->queue_coders.lock);
+    pthread_mutex_lock(&left->lock);
     ft_remove_from_queue(&left->queue_coders, coder);
-    pthread_mutex_unlock(&left->queue_coders.lock);
+    pthread_mutex_unlock(&left->lock);
 
-    pthread_mutex_lock(&right->queue_coders.lock);
+    pthread_mutex_lock(&right->lock);
     ft_remove_from_queue(&right->queue_coders, coder);
-    pthread_mutex_unlock(&right->queue_coders.lock);
+    pthread_mutex_unlock(&right->lock);
 }
