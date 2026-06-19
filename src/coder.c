@@ -45,18 +45,14 @@ void ft_refract(t_coder *coder)
     usleep(coder->data->time_debug * 1000);
 }
 
-void *ft_coder_routine(void *arg)
-{
-    t_coder *coder;
 
-    coder = (t_coder *)arg;
-    while ((ft_get_active_program(coder->data) == 1) && coder->coder_finished == 0)
-    {
-        if (ft_is_fifo(coder->data))
-        {
-            if (coder->coder_id % 2)
-                usleep(10);
-            ft_request_dongles(coder);
+
+
+
+
+void ft_scheduler_fifo(t_coder *coder)
+{
+    ft_request_dongles(coder);
             while (ft_get_active_program(coder->data))
             {
                 if (coder->left_dongle->queue_coders.first == coder &&
@@ -69,13 +65,31 @@ void *ft_coder_routine(void *arg)
                     break;
                 usleep(8);
             }
-            if (!ft_get_active_program(coder->data))
-                break ;
+            // if (!ft_get_active_program(coder->data))
+            //     break ;
             ft_remove_from_dongle_queue(coder);
             ft_compile(coder);
             ft_release_dongles(coder, coder->data);
             ft_debug(coder);
             ft_refract(coder);
+}
+
+
+
+
+
+void *ft_coder_routine(void *arg)
+{
+    t_coder *coder;
+
+    coder = (t_coder *)arg;
+    while ((ft_get_active_program(coder->data) == 1) && coder->coder_finished == 0)
+    {
+        if (ft_is_fifo(coder->data))
+        {
+            if (coder->coder_id % 2)
+                usleep(10);
+            ft_scheduler_fifo(coder);
         }
     }
     return (NULL);

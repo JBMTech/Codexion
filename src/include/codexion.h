@@ -62,8 +62,6 @@ typedef struct s_queue
 {
 	t_nodo_coder		*first;
 	t_nodo_coder		*last;
-	pthread_mutex_t		lock;
-	pthread_cond_t		cond;
 }	t_queue;
 
 typedef struct s_dongle
@@ -71,9 +69,8 @@ typedef struct s_dongle
 	long long		cooldown;
 	int				taken;
 	t_data			*data;
-	pthread_mutex_t	lock_cooldown;
-	pthread_mutex_t lock_taken;
-	pthread_mutex_t lock_queue;
+	pthread_mutex_t	lock;
+	pthread_cond_t	cond;
 	t_queue			queue_coders;
 }	t_dongle;
 
