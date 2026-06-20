@@ -24,21 +24,6 @@ void ft_request_dongles(t_coder *coder)
     pthread_mutex_unlock(&coder->right_dongle->lock);
 }
 
-// Cumprueba si ha terminado el cooldown de dongle
-int ft_dongle_is_ready(t_dongle *d)
-{
-    long long now;
-    int ready;
-
-    now = ft_get_now_time(d->data);
-
-    pthread_mutex_lock(&d->lock);
-    ready = (now >= d->cooldown);
-    pthread_mutex_unlock(&d->lock);
-
-    return ready;
-}
-
 // Reinicia el cooldown
 void ft_change_cooldown(t_data *data, t_dongle *dongle)
 {
@@ -80,76 +65,41 @@ void ft_release_dongles(t_coder *coder, t_data *data)
     pthread_mutex_unlock(&right->lock);
 }
 
-int ft_can_take_dongle(t_coder *coder, t_dongle *d)
-{
-    long long now;
-
-    now = ft_get_now_time(d->data);
-
-    pthread_mutex_lock(&d->lock);
-    if (!d->queue_coders.first)
-        return (0);
-    pthread_mutex_unlock(&d->lock);
-
-    if (d->queue_coders.first->coder != coder)
-        return (0);
-
-    if (d->taken)
-        return (0);
-
-    if (now < d->cooldown)
-        return (0);
-
-    return (1);
-}
-
-
-void ft_wait_dongle(t_coder *coder, t_dongle *d)
-{
-    pthread_mutex_lock(&d->lock);
-
-    while (!ft_can_take_dongle(coder, d)
-        && ft_get_active_program(coder->data))
-    {
-        pthread_cond_wait(&d->cond, &d->lock);
-    }
-
-    pthread_mutex_unlock(&d->lock);
-}
-
-void ft_release_dongle(t_dongle *d)
-{
-    long long now;
-
-    pthread_mutex_lock(&d->lock);
-
-    now = ft_get_now_time(d->data);
-
-    d->taken = 0;
-    d->cooldown = now + d->data->dongle_cooldown;
-
-    pthread_cond_broadcast(&d->cond);
-
-    pthread_mutex_unlock(&d->lock);
-}
 //----------------------------------------------
 
 int ft_can_take_both(t_coder *c)
 {
-    t_dongle *l = c->left_dongle;
-    t_dongle *r = c->right_dongle;
-    long long now = ft_get_now_time(c->data);
+    t_dongle *left;
+    t_dongle *right;
+    long long now;
 
-    if (!l->queue_coders.first || l->queue_coders.first->coder != c)
+    left = c->left_dongle;
+    right = c->right_dongle;
+
+    now = ft_get_now_time(c->data);
+
+    if (!left->queue_coders.first)
         return (0);
 
-    if (!r->queue_coders.first || r->queue_coders.first->coder != c)
+    if (!right->queue_coders.first)
         return (0);
 
-    if (l->taken || r->taken)
+    if (left->queue_coders.first->coder != c)
         return (0);
 
-    if (now < l->cooldown || now < r->cooldown)
+    if (right->queue_coders.first->coder != c)
+        return (0);
+
+    if (left->taken)
+        return (0);
+
+    if (right->taken)
+        return (0);
+
+    if (now < left->cooldown)
+        return (0);
+
+    if (now < right->cooldown)
         return (0);
 
     return (1);
@@ -157,12 +107,13 @@ int ft_can_take_both(t_coder *c)
 
 void ft_wait_both_dongles(t_coder *c)
 {
-    t_dongle *l = c->left_dongle;
-    t_dongle *r = c->right_dongle;
+    t_dongle *l;
+    t_dongle *r;
 
+    l = c->left_dongle;
+    r = c->right_dongle;;
     while (1)
     {
-        // orden global evita deadlock
         if (l < r)
         {
             pthread_mutex_lock(&l->lock);
@@ -173,41 +124,55 @@ void ft_wait_both_dongles(t_coder *c)
             pthread_mutex_lock(&r->lock);
             pthread_mutex_lock(&l->lock);
         }
-
         if (ft_can_take_both(c))
         {
             pthread_mutex_unlock(&l->lock);
             pthread_mutex_unlock(&r->lock);
             return;
         }
-
-        // esperar en UNO (pero con condición global)
         pthread_cond_wait(&l->cond, &l->lock);
-
         pthread_mutex_unlock(&l->lock);
         pthread_mutex_unlock(&r->lock);
     }
 }
 
-void ft_take_both(t_coder *c)
+int ft_take_both(t_coder *c)
 {
-    t_dongle *l = c->left_dongle;
-    t_dongle *r = c->right_dongle;
+    t_dongle *first;
+    t_dongle *second;
 
-    pthread_mutex_lock(&l->lock);
-    pthread_mutex_lock(&r->lock);
+    first = c->left_dongle;
+    second = c->right_dongle;
 
-    l->taken = 1;
-    r->taken = 1;
+    if (first > second)
+    {
+        first = c->right_dongle;
+        second = c->left_dongle;
+    }
 
-    ft_remove_from_queue(&l->queue_coders, c);
-    ft_remove_from_queue(&r->queue_coders, c);
+    pthread_mutex_lock(&first->lock);
+    pthread_mutex_lock(&second->lock);
 
-    pthread_mutex_unlock(&r->lock);
-    pthread_mutex_unlock(&l->lock);
+    if (!ft_can_take_both(c))
+    {
+        pthread_mutex_unlock(&second->lock);
+        pthread_mutex_unlock(&first->lock);
+        return (0);
+    }
+
+    c->left_dongle->taken = 1;
+    c->right_dongle->taken = 1;
+
+    ft_remove_from_queue(&c->left_dongle->queue_coders, c);
+    ft_remove_from_queue(&c->right_dongle->queue_coders, c);
+
+    pthread_mutex_unlock(&second->lock);
+    pthread_mutex_unlock(&first->lock);
 
     ft_print_log(c->data, TAKE, c->coder_id);
     ft_print_log(c->data, TAKE, c->coder_id);
+
+    return (1);
 }
 
 
@@ -231,23 +196,15 @@ void ft_release_both(t_coder *c)
 }
 
 
-void ft_wait_dongle(t_dongle *d, t_coder *c)
+void ft_wait_turn(t_coder *c)
 {
-    pthread_mutex_lock(&d->lock);
-
-    while (1)
+    while (ft_get_active_program(c->data))
     {
-        if (d->queue_coders.first &&
-            d->queue_coders.first->coder == c &&
-            d->taken == 0 &&
-            ft_get_now_time(d->data) >= d->cooldown &&
-            ft_get_active_program(d->data))
-            break;
+        if (ft_take_both(c))
+            return;
 
-        pthread_cond_wait(&d->cond, &d->lock);
+        usleep(100);
     }
-
-    pthread_mutex_unlock(&d->lock);
 }
 
 

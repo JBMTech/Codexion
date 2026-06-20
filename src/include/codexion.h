@@ -114,10 +114,14 @@ typedef struct s_data
 
 // check_dongle
 void ft_request_dongles(t_coder *coder);
-int ft_dongle_is_ready(t_dongle *d);
 void ft_release_dongles(t_coder *coder, t_data *data);
-int ft_take_left_dongle(t_coder *coder);
-int ft_take_right_dongle(t_coder *coder);
+// -----------------------
+int ft_can_take_both(t_coder *c);
+void ft_wait_both_dongles(t_coder *c);
+int ft_take_both(t_coder *c);
+void ft_release_both(t_coder *c);
+void ft_wait_turn(t_coder *c);
+int ft_take_dongle(t_dongle *d, t_coder *c);
 
 
 // check_schuduler

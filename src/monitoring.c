@@ -79,9 +79,9 @@ void ft_stop_program(t_data *data)
     i = 0;
     while (i < data->number_coders)
     {
-        pthread_mutex_lock(&data->dongle[i].queue_coders.lock);
-        pthread_cond_broadcast(&data->dongle[i].queue_coders.cond);
-        pthread_mutex_unlock(&data->dongle[i].queue_coders.lock);
+        pthread_mutex_lock(&data->dongle[i].lock);
+        pthread_cond_broadcast(&data->dongle[i].cond);
+        pthread_mutex_unlock(&data->dongle[i].lock);
         i++;
     }
 }

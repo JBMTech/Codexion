@@ -48,38 +48,21 @@ void ft_refract(t_coder *coder)
 
 void ft_scheduler_fifo(t_coder *coder)
 {
-    t_dongle *first;
-    t_dongle *second;
-
-    if (coder->coder_id % 2 == 0)
-    {
-        first = coder->right_dongle;
-        second = coder->left_dongle;
-    }
-    else
-    {
-        first = coder->left_dongle;
-        second = coder->right_dongle;
-    }
-
     ft_request_dongles(coder);
 
-    ft_wait_dongle(first, coder);
-    ft_take_dongle(first, coder);
+    ft_wait_turn(coder);
 
-    ft_wait_dongle(second, coder);
-    ft_take_dongle(second, coder);
+    if (!ft_get_active_program(coder->data))
+        return;
 
     ft_compile(coder);
 
     ft_release_dongles(coder, coder->data);
+
     ft_debug(coder);
+
     ft_refract(coder);
 }
-
-
-
-
 
 void *ft_coder_routine(void *arg)
 {
