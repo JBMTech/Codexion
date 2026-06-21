@@ -34,7 +34,6 @@ void ft_debug(t_coder *coder)
         return;
     ft_print_log(coder->data, DEBUG, coder->coder_id);
     usleep(coder->data->time_debug * 1000);
-    
 }
 
 void ft_refract(t_coder *coder)

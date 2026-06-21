@@ -78,8 +78,6 @@ typedef struct s_coder{
     int				coder_id;
 	int				coder_compiled;
 	int				coder_finished;
-	int 			has_left;
-    int 			has_right;
 	long long		time_burnout;
 
 	t_data			*data;
@@ -121,7 +119,6 @@ void ft_wait_both_dongles(t_coder *c);
 int ft_take_both(t_coder *c);
 void ft_release_both(t_coder *c);
 void ft_wait_turn(t_coder *c);
-int ft_take_dongle(t_dongle *d, t_coder *c);
 
 
 // check_schuduler

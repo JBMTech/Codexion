@@ -55,6 +55,11 @@ void ft_init_coders(t_data *data, t_coder *coder, int count)
 			coder->right_dongle = &data->dongle[count];
 		}
 	}
+	else if (data->number_coders == 1)
+	{
+		coder->left_dongle = &data->dongle[0];
+		coder->right_dongle = NULL;
+	}
 }
 
 void ft_init_basic_data_coders(t_data *data, t_coder *coder, int nbr_coder)
@@ -63,8 +68,6 @@ void ft_init_basic_data_coders(t_data *data, t_coder *coder, int nbr_coder)
 	coder->time_burnout = ft_get_time_ms();
 	coder->coder_compiled = 0;
 	coder->coder_finished = 0;
-	coder->has_left = 0;
-	coder->has_right = 0;
 	coder->data = data;
 	coder->left_dongle = NULL;
 	coder->right_dongle = NULL;
