@@ -34,19 +34,28 @@ int	ft_add_to_queue(t_coder *coder_to_add, t_queue *queue)
 	return (0);
 }
 
+void	ft_queue_access(t_coder *coder, t_dongle *dongle)
+{
+	pthread_mutex_lock(&dongle->lock);
+	ft_add_to_queue(coder, &dongle->queue_coders);
+	pthread_mutex_unlock(&dongle->lock);
+}
+
 void	ft_request_dongles(t_coder *coder)
 {
-	if (coder->left_dongle)
+	if (coder->coder_id % 2 != 0)
 	{
-		pthread_mutex_lock(&coder->left_dongle->lock);
-		ft_add_to_queue(coder, &coder->left_dongle->queue_coders);
-		pthread_mutex_unlock(&coder->left_dongle->lock);
+		if (coder->left_dongle)
+			ft_queue_access(coder, coder->left_dongle);
+		if (coder->right_dongle)
+			ft_queue_access(coder, coder->right_dongle);
 	}
-	if (coder->right_dongle)
+	else
 	{
-		pthread_mutex_lock(&coder->right_dongle->lock);
-		ft_add_to_queue(coder, &coder->right_dongle->queue_coders);
-		pthread_mutex_unlock(&coder->right_dongle->lock);
+		if (coder->right_dongle)
+			ft_queue_access(coder, coder->right_dongle);
+		if (coder->left_dongle)
+			ft_queue_access(coder, coder->left_dongle);
 	}
 }
 

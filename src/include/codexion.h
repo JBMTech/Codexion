@@ -159,6 +159,7 @@ void		ft_change_taken(t_dongle *dongle);
 void		ft_release_dongles(t_coder *coder, t_data *data);
 
 // management_queue
+void		ft_queue_access(t_coder *coder, t_dongle *dongle);
 int			ft_add_to_queue(t_coder *coder_to_add, t_queue *queue);
 void		ft_request_dongles(t_coder *coder);
 void		ft_remove_from_queue(t_queue *queue, t_coder *coder);
