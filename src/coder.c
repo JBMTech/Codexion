@@ -52,8 +52,8 @@ void	*ft_coder_routine(void *arg)
 	{
 		if (ft_is_fifo(coder->data))
 			ft_scheduler_fifo(coder);
-		// else if (ft_is_dfe(coder->data))
-		// 	ft_scheduler_dfe(coder);
+		else if (ft_is_dfe(coder->data))
+			ft_scheduler_dfe(coder);
 	}
 	return (NULL);
 }

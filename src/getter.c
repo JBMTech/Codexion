@@ -45,6 +45,7 @@ int	ft_get_have_finished(t_coder *coder)
 	return (finished);
 }
 
+// ¡¡Atencioón!! Codigo que todavia no ha sido probado -> 100% de ERROR!!
 void	ft_request_dongles_dfe(t_coder *coder)
 {
 	
@@ -65,13 +66,11 @@ void	ft_request_dongles_dfe(t_coder *coder)
 	}
 }
 
-// int	ft_coder_near_deadline(t_dongle *dongle)
-// {
-// 	long long	deadline;
+// Esto es correcto nos da el deadline!!
+long long	ft_get_coder_deadline(t_coder *coder)
+{
+	long long	deadline;
 
-// 	deadline = ft_get_burnout(coder) + coder->last_compile_start;
-// 	// En left_dongle
-// 	// Si el coder.fisrt es menor que coder.second
-// 		//Gana coder.first --> return (1)
-// 	// else -> return (0)
-// }
+	deadline = ft_get_burnout(coder) + coder->last_compile_start;
+	return deadline;
+}

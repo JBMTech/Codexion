@@ -40,19 +40,42 @@ int	ft_can_take_both(t_coder *c)
 	return (1);
 }
 
-void	ft_wait_both_dongles(t_coder *c)
+void	ft_request_dongles(t_coder *coder)
 {
-	while (1)
+	if (coder->coder_id % 2 != 0)
 	{
-		if (ft_can_take_both(c))
-		{
-			pthread_mutex_unlock(&c->left_dongle->lock);
-			pthread_mutex_unlock(&c->right_dongle->lock);
-			return ;
-		}
-		pthread_cond_wait(&c->left_dongle->cond, &c->left_dongle->lock);
-		pthread_mutex_unlock(&c->left_dongle->lock);
-		pthread_mutex_unlock(&c->right_dongle->lock);
+		if (coder->left_dongle)
+			ft_queue_access(coder, coder->left_dongle);
+		if (coder->right_dongle)
+			ft_queue_access(coder, coder->right_dongle);
+	}
+	else if (coder->coder_id % 2 == 0)
+	{
+		usleep(100);
+		if (coder->right_dongle)
+			ft_queue_access(coder, coder->right_dongle);
+		if (coder->left_dongle)
+			ft_queue_access(coder, coder->left_dongle);
+	}
+}
+
+// Estructura imcompleta, verificar con los demás elementos
+void	ft_request_dongles_dfe(t_coder *coder)
+{
+	if (coder->coder_id % 2 != 0)
+	{
+		if (coder->left_dongle)
+			ft_queue_access_dfe(coder, coder->left_dongle);
+		if (coder->right_dongle)
+			ft_queue_access_dfe(coder, coder->right_dongle);
+	}
+	else if (coder->coder_id % 2 == 0)
+	{
+		usleep(100);
+		if (coder->right_dongle)
+			ft_queue_access_dfe(coder, coder->right_dongle);
+		if (coder->left_dongle)
+			ft_queue_access_dfe(coder, coder->left_dongle);
 	}
 }
 

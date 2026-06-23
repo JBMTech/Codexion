@@ -37,7 +37,9 @@ void	ft_scheduler_fifo(t_coder *coder)
 	ft_refract(coder);
 }
 
-// void	ft_scheduler_dfe(coder)
-// {
+// Todavia no esta listo la estructura de DFE
+void	ft_scheduler_dfe(coder)
+{
+	ft_request_dongles_dfe(coder);
 
-// }
+}

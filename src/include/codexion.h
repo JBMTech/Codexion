@@ -110,11 +110,14 @@ typedef struct s_data
 int			ft_can_take_both(t_coder *c);
 void		ft_wait_both_dongles(t_coder *c);
 void		ft_wait_turn(t_coder *c);
+void		ft_request_dongles(t_coder *coder);
+void		ft_request_dongles_dfe(t_coder *coder);
 
 // check_schuduler
 int			ft_is_fifo(t_data *data);
 int			ft_is_dfe(t_data *data);
 void		ft_scheduler_fifo(t_coder *coder);
+void		ft_scheduler_dfe(coder);
 
 // coder
 void		*ft_coder_routine(void *arg);
@@ -126,6 +129,7 @@ void		ft_refract(t_coder *coder);
 int			ft_get_active_program(t_data *data);
 long long	ft_get_burnout(t_coder *coder);
 int			ft_get_have_finished(t_coder *coder);
+long long	ft_get_coder_deadline(t_coder *coder);
 
 // init_mutex
 void		ft_init_mutex_dongle_coder(t_data *data);
@@ -162,7 +166,7 @@ void		ft_release_dongles(t_coder *coder, t_data *data);
 // management_queue
 void		ft_queue_access(t_coder *coder, t_dongle *dongle);
 int			ft_add_to_queue(t_coder *coder_to_add, t_queue *queue);
-void		ft_request_dongles(t_coder *coder);
+void		ft_queue_access_dfe(t_coder *coder, t_dongle *dongle);
 void		ft_remove_from_queue(t_queue *queue, t_coder *coder);
 void		ft_remove_from_dongle_queue(t_coder *coder);
 
@@ -179,5 +183,8 @@ void		ft_get_nbr_coder_finished(t_data *data, int *finished);
 // setter
 void		ft_set_burnout(t_coder *coder);
 void		ft_set_finished(t_coder *coder);
+
+// queue_dfe
+int	ft_add_to_queue_edf(t_coder *coder, t_queue *queue);
 
 #endif
