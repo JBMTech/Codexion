@@ -17,7 +17,10 @@ int	main(int argc, char **argv)
 	t_data	data;
 
 	if (argc != 9)
+	{
 		ft_print_msg();
+		return (1);
+	}
 	if (!ft_parser_args(argv))
 	{
 		printf(RED"[ERROR]: Invalid arguments\n"RESET);

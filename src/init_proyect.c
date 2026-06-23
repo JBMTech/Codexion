@@ -67,6 +67,7 @@ void	ft_init_basic_data_coders(t_data *data, t_coder *coder, int nbr_coder)
 	coder->time_burnout = ft_get_time_ms();
 	coder->coder_compiled = 0;
 	coder->coder_finished = 0;
+	coder->last_compile_start = ft_get_time_ms();
 	coder->data = data;
 	coder->left_dongle = NULL;
 	coder->right_dongle = NULL;

@@ -77,6 +77,7 @@ typedef struct s_coder
 	int				coder_compiled;
 	int				coder_finished;
 	long long		time_burnout;
+	long long		last_compile_start;
 	t_data			*data;
 	t_dongle		*left_dongle;
 	t_dongle		*right_dongle;

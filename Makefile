@@ -34,7 +34,7 @@ FILES		= codexion.c \
 			  setter.c \
 			  init_thread.c \
 			  monitoring.c \
-			  log.c \
+			  logs.c \
 			  management_dongle.c \
 			  management_queue.c \
 			  management_time.c \

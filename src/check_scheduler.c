@@ -36,3 +36,8 @@ void	ft_scheduler_fifo(t_coder *coder)
 	ft_debug(coder);
 	ft_refract(coder);
 }
+
+// void	ft_scheduler_dfe(coder)
+// {
+
+// }

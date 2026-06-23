@@ -50,8 +50,9 @@ void	ft_request_dongles(t_coder *coder)
 		if (coder->right_dongle)
 			ft_queue_access(coder, coder->right_dongle);
 	}
-	else
+	else if (coder->coder_id % 2 == 0)
 	{
+		usleep(9);
 		if (coder->right_dongle)
 			ft_queue_access(coder, coder->right_dongle);
 		if (coder->left_dongle)

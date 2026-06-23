@@ -18,6 +18,7 @@ void	ft_compile(t_coder *coder)
 	{
 		ft_set_burnout(coder);
 		ft_print_log(coder->data, COMP, coder->coder_id);
+		coder->last_compile_start = ft_get_now_time(coder->data);
 		usleep(coder->data->time_compile * 1000);
 		coder->coder_compiled += 1;
 		if (coder->coder_compiled >= coder->data->number_compiles_required)
@@ -51,6 +52,8 @@ void	*ft_coder_routine(void *arg)
 	{
 		if (ft_is_fifo(coder->data))
 			ft_scheduler_fifo(coder);
+		// else if (ft_is_dfe(coder->data))
+		// 	ft_scheduler_dfe(coder);
 	}
 	return (NULL);
 }
