@@ -65,7 +65,6 @@ void	ft_request_dongles_edf(t_coder *coder)
 {
 	if (coder->coder_id % 2 != 0)
 	{
-		printf("Yo soy --> Coder %d || last_compiler = %lld || deadline = %lld\n", coder->coder_id, coder->last_compile_start, ft_get_coder_deadline(coder));
 		if (coder->left_dongle)
 			ft_queue_access_edf(coder, coder->left_dongle);
 		if (coder->right_dongle)
@@ -73,7 +72,6 @@ void	ft_request_dongles_edf(t_coder *coder)
 	}
 	else if (coder->coder_id % 2 == 0)
 	{
-		printf("Yo soy --> Coder %d || last_compiler = %lld || deadline = %lld\n", coder->coder_id, coder->last_compile_start, ft_get_coder_deadline(coder));
 		usleep(30);
 		if (coder->right_dongle)
 			ft_queue_access_edf(coder, coder->right_dongle);

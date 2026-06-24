@@ -45,7 +45,10 @@ void	ft_queue_access_edf(t_coder *coder, t_dongle *dongle)
 {
 	pthread_mutex_lock(&dongle->lock);
 	if (ft_add_to_queue_edf(coder, &dongle->queue_coders))
+	{
+		pthread_mutex_unlock(&dongle->lock);
 		return ;
+	}
 	pthread_mutex_unlock(&dongle->lock);
 }
 

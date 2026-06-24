@@ -48,10 +48,19 @@ int	ft_add_to_queue_edf(t_coder *coder, t_queue *queue)
 	if (!queue->first)
 		return (ft_insert_front(queue, node), 0);
 	if (deadline < ft_get_coder_deadline(queue->first->coder))
-	{
-		printf("Yo soy Coder %d y deadline %lld\n", coder->coder_id, ft_get_coder_deadline(coder));
-		printf("Yo soy Coder %d y deadline %lld\n", queue->first->coder->coder_id, ft_get_coder_deadline(queue->first->coder));
 		return (ft_insert_front(queue, node), 0);
+	while (queue->first->next)
+	{
+		if (deadline < ft_get_coder_deadline(queue->first->next->coder))
+		{
+			queue->first->next = node;
+			node->next = queue->first->next;
+			return (0);
+		}
+		queue->first = queue->first->next;
+		queue->first->next = queue->first->next->next;
 	}
+	queue->last->next = node;
+	queue->last = node;
 	return (0);
 }
