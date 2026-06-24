@@ -31,7 +31,7 @@ void	ft_print_log(t_data *data, char *status, int coder_id)
 	if (strcmp(status, TAKE) == 0)
 		printf(BLUE"[%lld] Coder %d has taken a dongle\n"RESET, time, coder_id);
 	else if (strcmp(status, COMP) == 0)
-		printf(GREEN"[%lld] Coder %d is compiling\n"RESET, time, coder_id);
+		printf(GREEN"[%lld] Coder %d is compiling <--&--> deadline = [%lld]\n"RESET, time, coder_id, ft_get_coder_deadline(&data->coder[coder_id - 1]));
 	else if (strcmp(status, DEBUG) == 0)
 		printf(YELLOW"[%lld] Coder %d is debugging\n"RESET, time, coder_id);
 	else if (strcmp(status, REFACT) == 0)

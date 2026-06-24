@@ -38,8 +38,14 @@ void	ft_scheduler_fifo(t_coder *coder)
 }
 
 // Todavia no esta listo la estructura de DFE
-void	ft_scheduler_dfe(coder)
+void	ft_scheduler_edf(t_coder *coder)
 {
-	ft_request_dongles_dfe(coder);
-
+	usleep(100);
+	ft_request_dongles_edf(coder);
+	ft_wait_turn(coder);
+	if (!ft_get_active_program(coder->data))
+		return ;
+	ft_release_dongles(coder, coder->data);
+	ft_debug(coder);
+	ft_refract(coder);
 }

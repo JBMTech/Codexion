@@ -45,32 +45,10 @@ int	ft_get_have_finished(t_coder *coder)
 	return (finished);
 }
 
-// ¡¡Atencioón!! Codigo que todavia no ha sido probado -> 100% de ERROR!!
-void	ft_request_dongles_dfe(t_coder *coder)
-{
-	
-	if (coder->coder_id % 2 != 0)
-	{
-		if (coder->left_dongle)
-			ft_queue_access(coder, coder->left_dongle);
-		if (coder->right_dongle)
-			ft_queue_access(coder, coder->right_dongle);
-	}
-	else if (coder->coder_id % 2 == 0)
-	{
-		usleep(9);
-		if (coder->right_dongle)
-			ft_queue_access(coder, coder->right_dongle);
-		if (coder->left_dongle)
-			ft_queue_access(coder, coder->left_dongle);
-	}
-}
-
-// Esto es correcto nos da el deadline!!
 long long	ft_get_coder_deadline(t_coder *coder)
 {
 	long long	deadline;
 
-	deadline = ft_get_burnout(coder) + coder->last_compile_start;
-	return deadline;
+	deadline = coder->data->time_burnout + coder->last_compile_start;
+	return (deadline);
 }

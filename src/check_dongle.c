@@ -51,45 +51,51 @@ void	ft_request_dongles(t_coder *coder)
 	}
 	else if (coder->coder_id % 2 == 0)
 	{
-		usleep(100);
+		usleep(30);
 		if (coder->right_dongle)
 			ft_queue_access(coder, coder->right_dongle);
 		if (coder->left_dongle)
 			ft_queue_access(coder, coder->left_dongle);
+		usleep(30);
 	}
 }
 
 // Estructura imcompleta, verificar con los demás elementos
-void	ft_request_dongles_dfe(t_coder *coder)
+void	ft_request_dongles_edf(t_coder *coder)
 {
 	if (coder->coder_id % 2 != 0)
 	{
+		printf("Yo soy --> Coder %d || last_compiler = %lld || deadline = %lld\n", coder->coder_id, coder->last_compile_start, ft_get_coder_deadline(coder));
 		if (coder->left_dongle)
-			ft_queue_access_dfe(coder, coder->left_dongle);
+			ft_queue_access_edf(coder, coder->left_dongle);
 		if (coder->right_dongle)
-			ft_queue_access_dfe(coder, coder->right_dongle);
+			ft_queue_access_edf(coder, coder->right_dongle);
 	}
 	else if (coder->coder_id % 2 == 0)
 	{
-		usleep(100);
+		printf("Yo soy --> Coder %d || last_compiler = %lld || deadline = %lld\n", coder->coder_id, coder->last_compile_start, ft_get_coder_deadline(coder));
+		usleep(30);
 		if (coder->right_dongle)
-			ft_queue_access_dfe(coder, coder->right_dongle);
+			ft_queue_access_edf(coder, coder->right_dongle);
 		if (coder->left_dongle)
-			ft_queue_access_dfe(coder, coder->left_dongle);
+			ft_queue_access_edf(coder, coder->left_dongle);
+		usleep(30);
 	}
 }
 
-void	ft_wait_turn(t_coder *c)
+void	ft_wait_turn(t_coder *coder)
 {
-	while (ft_get_active_program(c->data))
+	while (ft_get_active_program(coder->data))
 	{
-		if (ft_take_both(c))
+		if (ft_take_both(coder))
 		{
-			ft_print_log(c->data, TAKE, c->coder_id);
-			ft_print_log(c->data, TAKE, c->coder_id);
-			ft_compile(c);
+			usleep(10);
+			ft_print_log(coder->data, TAKE, coder->coder_id);
+			ft_print_log(coder->data, TAKE, coder->coder_id);
+			ft_compile(coder);
 			return ;
+			usleep(30);
 		}
-		usleep(9);
+		usleep(10);
 	}
 }

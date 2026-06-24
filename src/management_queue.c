@@ -41,14 +41,13 @@ void	ft_queue_access(t_coder *coder, t_dongle *dongle)
 	pthread_mutex_unlock(&dongle->lock);
 }
 
-// Hay que afinar esta parte de codigo para que se compatible con el DFE
-void	ft_queue_access_dfe(t_coder *coder, t_dongle *dongle)
+void	ft_queue_access_edf(t_coder *coder, t_dongle *dongle)
 {
 	pthread_mutex_lock(&dongle->lock);
-	ft_add_to_queue_edf(coder, &dongle->queue_coders);
+	if (ft_add_to_queue_edf(coder, &dongle->queue_coders))
+		return ;
 	pthread_mutex_unlock(&dongle->lock);
 }
-
 
 void	ft_remove_from_queue(t_queue *queue, t_coder *coder)
 {
