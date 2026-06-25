@@ -49,6 +49,8 @@ long long	ft_get_coder_deadline(t_coder *coder)
 {
 	long long	deadline;
 
+	pthread_mutex_lock(&coder->lock_burnout);
 	deadline = coder->data->time_burnout + coder->last_compile_start;
+	pthread_mutex_unlock(&coder->lock_burnout);
 	return (deadline);
 }
