@@ -38,7 +38,6 @@ int	ft_take_both(t_coder *c)
 	return (1);
 }
 
-// Reinicia el cooldown
 void	ft_change_cooldown(t_data *data, t_dongle *dongle)
 {
 	long long	now;
@@ -49,7 +48,6 @@ void	ft_change_cooldown(t_data *data, t_dongle *dongle)
 	pthread_mutex_unlock(&dongle->lock);
 }
 
-// Suelta los dongles
 void	ft_change_taken(t_dongle *dongle)
 {
 	pthread_mutex_lock(&dongle->lock);

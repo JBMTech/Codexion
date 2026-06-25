@@ -39,7 +39,8 @@ FILES		= codexion.c \
 			  management_queue.c \
 			  management_time.c \
 			  init_parser.c \
-			  queue_dfe.c
+			  queue_dfe.c \
+			  destroy_exit.c
 
 SRCS		= $(addprefix $(SRCS_DIR)/,$(FILES))
 OBJS		= $(addprefix $(OBJ_DIR)/,$(FILES:.c=.o))

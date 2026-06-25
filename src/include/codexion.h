@@ -186,7 +186,15 @@ void			ft_set_finished(t_coder *coder);
 
 // queue_dfe
 t_nodo_coder	*ft_create_node(t_coder *coder);
+int				ft_has_higher_priority(long long dead1, long long dead2);
 void			ft_insert_front(t_queue *queue, t_nodo_coder *node);
+void			ft_insert_back(t_queue *queue, t_nodo_coder *node);
+void			ft_find_position(t_queue *q, t_nodo_coder *n,
+				t_nodo_coder **prev, t_nodo_coder **curr);
 int				ft_add_to_queue_edf(t_coder *coder, t_queue *queue);
+
+// destroy_exit
+void			ft_destroy_mutex(t_data *data);
+void 			ft_free_memory(t_data *data);
 
 #endif

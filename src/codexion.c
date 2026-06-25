@@ -36,5 +36,7 @@ int	main(int argc, char **argv)
 	ft_init_mutex(&data);
 	ft_create_thread(&data);
 	ft_join_thread(&data);
+	ft_destroy_mutex(&data);
+	ft_free_memory(&data);
 	return (0);
 }

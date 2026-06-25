@@ -35,7 +35,7 @@ t_nodo_coder	*ft_create_node(t_coder *coder)
 // matar primero el de menor deadline
 // EDF inverso debería:
 // mantener vivo más tiempo al de mayor deadline
-static int	ft_has_higher_priority(long long dead1, long long dead2)
+int	ft_has_higher_priority(long long dead1, long long dead2)
 {
 	return (dead1 < dead2); // inverso ">" normal "<"
 }
@@ -52,7 +52,7 @@ void	ft_insert_front(t_queue *queue, t_nodo_coder *node)
 	queue->first = node;
 }
 
-static void	ft_insert_back(t_queue *queue, t_nodo_coder *node)
+void	ft_insert_back(t_queue *queue, t_nodo_coder *node)
 {
 	if (!queue->first)
 	{
@@ -64,7 +64,7 @@ static void	ft_insert_back(t_queue *queue, t_nodo_coder *node)
 	queue->last = node;
 }
 
-static void	ft_find_position(t_queue *q, t_nodo_coder *n,
+void	ft_find_position(t_queue *q, t_nodo_coder *n,
 				t_nodo_coder **prev, t_nodo_coder **curr)
 {
 	long long	deadline;

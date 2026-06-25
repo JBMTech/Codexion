@@ -16,8 +16,6 @@ void	ft_init_data(t_data *data)
 {
 	data->active_program = 1;
 	data->time_start = ft_get_time_ms();
-	data->dongle->queue_coders.first = NULL;
-	data->dongle->queue_coders.last = NULL;
 	ft_create_coders_and_dongles(data);
 }
 
@@ -28,9 +26,12 @@ void	ft_create_coders_and_dongles(t_data *data)
 	index = 0;
 	while (data->number_coders != index)
 	{
-		ft_init_coders(data, &data->coder[index], index);
-		data->dongle[index].cooldown = 0;
+		data->dongle[index].taken = 0;
 		data->dongle[index].data = data;
+		data->dongle[index].cooldown = 0;
+		data->dongle[index].queue_coders.first = NULL;
+		data->dongle[index].queue_coders.last = NULL;
+		ft_init_coders(data, &data->coder[index], index);
 		index++;
 	}
 }

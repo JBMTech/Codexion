@@ -60,7 +60,6 @@ void	ft_request_dongles(t_coder *coder)
 	}
 }
 
-// Estructura imcompleta, verificar con los demás elementos
 void	ft_request_dongles_edf(t_coder *coder)
 {
 	if (coder->coder_id % 2 != 0)

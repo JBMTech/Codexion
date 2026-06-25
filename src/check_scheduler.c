@@ -28,6 +28,8 @@ int	ft_is_dfe(t_data *data)
 
 void	ft_scheduler_fifo(t_coder *coder)
 {
+	if (coder->coder_id % 2 == 0)
+		usleep(1000);
 	ft_request_dongles(coder);
 	ft_wait_turn(coder);
 	if (!ft_get_active_program(coder->data))
@@ -37,10 +39,10 @@ void	ft_scheduler_fifo(t_coder *coder)
 	ft_refract(coder);
 }
 
-// Todavia no esta listo la estructura de DFE
 void	ft_scheduler_edf(t_coder *coder)
 {
-	usleep(100);
+	if (coder->coder_id % 2 == 0)
+		usleep(1000);
 	ft_request_dongles_edf(coder);
 	ft_wait_turn(coder);
 	if (!ft_get_active_program(coder->data))
