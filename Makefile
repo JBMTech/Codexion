@@ -30,14 +30,14 @@ FILES		= codexion.c \
 			  coder.c \
 			  init_mutex.c \
 			  getter.c \
-			  init_proyect.c \
+			  init_data.c \
 			  setter.c \
 			  init_thread.c \
 			  monitoring.c \
 			  logs.c \
-			  management_dongle.c \
-			  management_queue.c \
-			  management_time.c \
+			  dongle_management.c \
+			  queue_management.c \
+			  time_management.c \
 			  init_parser.c \
 			  queue_dfe.c \
 			  destroy_exit.c

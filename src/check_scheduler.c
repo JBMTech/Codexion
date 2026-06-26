@@ -51,3 +51,15 @@ void	ft_scheduler_edf(t_coder *coder)
 	ft_debug(coder);
 	ft_refract(coder);
 }
+
+t_nodo_coder	*ft_create_node(t_coder *coder)
+{
+	t_nodo_coder	*node;
+
+	node = malloc(sizeof(t_nodo_coder));
+	if (!node)
+		return (NULL);
+	node->coder = coder;
+	node->next = NULL;
+	return (node);
+}

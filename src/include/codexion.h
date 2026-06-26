@@ -6,7 +6,7 @@
 /*   By: jabuleje <jabuleje@student.42madrid.c      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/11 11:54:23 by jabuleje          #+#    #+#             */
-/*   Updated: 2026/06/22 11:00:50 by jabuleje         ###   ########.fr       */
+/*   Updated: 2026/06/26 10:13:54 by jabuleje         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,12 +24,8 @@
 # define FIFO		"fifo"
 # define EDF		"edf"
 
-// Action //
-# define ADD		"add_queue"
-# define REMOVE		"remove_queue"
-# define TAKE		"take_dongle"
-
 // Status //
+# define TAKE		"take_dongle"
 # define COMP		"COMPILING"
 # define DEBUG		"DEBUGGING"
 # define REFACT		"REFACTORING"
@@ -106,7 +102,6 @@ typedef struct s_data
 }	t_data;
 
 // check_dongle
-
 int				ft_can_take_both(t_coder *c);
 void			ft_wait_both_dongles(t_coder *c);
 void			ft_wait_turn(t_coder *c);
@@ -118,6 +113,7 @@ int				ft_is_fifo(t_data *data);
 int				ft_is_dfe(t_data *data);
 void			ft_scheduler_fifo(t_coder *coder);
 void			ft_scheduler_edf(t_coder *coder);
+t_nodo_coder	*ft_create_node(t_coder *coder);
 
 // coder
 void			*ft_coder_routine(void *arg);
@@ -137,12 +133,11 @@ void			ft_init_mutex(t_data *data);
 
 // init_parser
 int				ft_is_number(char *str);
-char			*ft_tolower(char *str);
 int				ft_valid_scheduler(char *scheduler);
 int				ft_parser_args(char **argv);
 int				ft_generated_data(t_data *data, char **argv);
 
-// init_proyect
+// init_data
 void			ft_init_data(t_data *data);
 void			ft_create_coders_and_dongles(t_data *data);
 void			ft_init_coders(t_data *data, t_coder *coder, int count);
@@ -157,20 +152,20 @@ void			ft_join_thread(t_data *data);
 void			ft_print_msg(void);
 void			ft_print_log(t_data *data, char *status, int coder_id);
 
-// management_dongle
+// dongle_management
 int				ft_take_both(t_coder *c);
 void			ft_change_cooldown(t_data *data, t_dongle *dongle);
 void			ft_change_taken(t_dongle *dongle);
 void			ft_release_dongles(t_coder *coder, t_data *data);
 
-// management_queue
+// queue_management
 void			ft_queue_access(t_coder *coder, t_dongle *dongle);
 int				ft_add_to_queue(t_coder *coder_to_add, t_queue *queue);
 void			ft_queue_access_edf(t_coder *coder, t_dongle *dongle);
 void			ft_remove_from_queue(t_queue *queue, t_coder *coder);
 void			ft_remove_from_dongle_queue(t_coder *coder);
 
-// management_time
+// time_management
 long long		ft_get_time_ms(void);
 long long		ft_get_now_time(t_data *data);
 
@@ -185,16 +180,15 @@ void			ft_set_burnout(t_coder *coder);
 void			ft_set_finished(t_coder *coder);
 
 // queue_dfe
-t_nodo_coder	*ft_create_node(t_coder *coder);
 int				ft_has_higher_priority(long long dead1, long long dead2);
 void			ft_insert_front(t_queue *queue, t_nodo_coder *node);
 void			ft_insert_back(t_queue *queue, t_nodo_coder *node);
-void			ft_find_position(t_queue *q, t_nodo_coder *n,
-				t_nodo_coder **prev, t_nodo_coder **curr);
+void			ft_find_position(t_queue *q,
+					t_nodo_coder *n, t_nodo_coder **prev, t_nodo_coder **curr);
 int				ft_add_to_queue_edf(t_coder *coder, t_queue *queue);
 
 // destroy_exit
 void			ft_destroy_mutex(t_data *data);
-void 			ft_free_memory(t_data *data);
+void			ft_free_memory(t_data *data);
 
 #endif
