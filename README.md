@@ -14,3 +14,9 @@
 // matar primero el de menor deadline
 // EDF inverso debería:
 // mantener vivo más tiempo al de mayor deadline
+
+
+
+# Recursos
+-https://dev.to/yel-bakk/thread-in-c-codexion-42-1ao
+-https://dev.to/yel-bakk/codexion-4fk8

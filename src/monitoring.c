@@ -25,7 +25,7 @@ void	*ft_checker_program(void *arg)
 		{
 			ft_stop_program(data);
 			pthread_mutex_lock(&data->lock_print);
-			printf("SUCCESS\n");
+			printf("🏁 === SUCCESS ===\n");
 			pthread_mutex_unlock(&data->lock_print);
 			return (NULL);
 		}
