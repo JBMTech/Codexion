@@ -135,3 +135,11 @@ Separating this responsibility from the worker threads centralizes the detection
 - https://dev.to/yel-bakk/codexion-4fk8 Codexion concept.
 - https://dev.to/yel-bakk/thread-in-c-codexion-42-1ao Codexion threads.
 - https://www.youtube.com/watch?v=d9s_d28yJq0&list=PLfqABt5AS4FmuQf70psXrsMLEDQXNkLq2 Understanding multi-threading in C.
+
+# Use of AI
+
+AI tools (ChatGPT) were used to:
+
+- Understand the topic and the development of the structures.
+- Provide examples of the use of threads, mutexes, locks, and destruction.
+- Understand memory leaks (Valgrind) and how to detect them.
