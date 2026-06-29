@@ -20,18 +20,24 @@
 # include <string.h>
 # include <sys/time.h>
 
-// Scheduler //
+/**
+ * Scheduler
+ */
 # define FIFO		"fifo"
 # define EDF		"edf"
 
-// Status //
+/**
+ * Status
+ */
 # define TAKE		"take_dongle"
 # define COMP		"COMPILING"
 # define DEBUG		"DEBUGGING"
 # define REFACT		"REFACTORING"
 # define BURN		"BURNED_OUT"
 
-// Colours //
+/**
+ * Colours
+ */
 # define RESET   "\033[0m"
 # define RED     "\033[31m"
 # define GREEN   "\033[32m"
@@ -39,6 +45,9 @@
 # define BLUE    "\033[34m"
 # define PURPLE  "\033[35m"
 
+/**
+ * Structure
+ */
 typedef struct s_data			t_data;
 typedef struct s_coder			t_coder;
 typedef struct s_dongle			t_dongle;

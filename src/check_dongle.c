@@ -89,6 +89,7 @@ void	ft_wait_turn(t_coder *coder)
 			usleep(10);
 			ft_print_log(coder->data, TAKE, coder->coder_id);
 			ft_print_log(coder->data, TAKE, coder->coder_id);
+			ft_print_log(coder->data, COMP, coder->coder_id);
 			ft_compile(coder);
 			return ;
 			usleep(30);

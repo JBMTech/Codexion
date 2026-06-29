@@ -1,6 +1,8 @@
-*This project has been created as part of the 42 curriculum by jabuleje*
+*This project has been created as part of the 42 curriculum by jabuleje.*
 
-# Codexion
+# 🧩 Codexion
+
+## 📖 Description
 
 **Codexion** is a concurrent simulator developed in C using POSIX threads (pthreads). The project simulates a group of programmers (‘coders’) who share a limited number of dongles in order to compile code.
 
@@ -11,7 +13,7 @@ The simulation implements two scheduling algorithms:
 
 ---
 
-# Objectives
+## 🎯 Objectives
 
 - To learn concurrent programming.
 - To avoid data races.
@@ -21,13 +23,16 @@ The simulation implements two scheduling algorithms:
 
 ---
 
-# Compilation
+## 🛠️ Run and other Commands
 
 ```bash
-make
+make          # Ejecution
+make re
+make clean
+make fclean
 ```
 
-# Uso
+## ▶️ Uso
 
 ```bash
 ./codexion <number_of_coders> <burnout_time> <compile_time><debug_time> <refactor_time> <compile_required> <dongle_cooldown> <fifo|edf>
@@ -41,7 +46,7 @@ Ejemplo:
 
 ---
 
-# Parameters
+## 📄 Parameters
 
 | Parameter | Description |
 |-----------|-------------|
@@ -56,7 +61,7 @@ Ejemplo:
 
 ---
 
-# FIFO Algorithm
+## 🔹 FIFO Algorithm
 
 Each dongle maintains its own FIFO queue.
 
@@ -69,9 +74,8 @@ When a coder requests a dongle:
 4. If they have both dongles:
    - they compile.
 
----
 
-# EDF Algorithm
+## 🔹 EDF Algorithm
 
 Each dongle maintains a queue sorted by deadline.
 
@@ -85,7 +89,7 @@ The coder with the earliest deadline has priority.
 
 ---
 
-# Checks
+## 🧩 Checks
 
 **Memory leaks**
 
@@ -103,11 +107,11 @@ Running Valgrind causes delays in the execution of codexion; it is recommended t
 
 ---
 
-# Additionnal informations
+## 🧠 Additionnal informations
 
-## Blocking cases handled 
+### ♦️ Blocking cases handled 
 
-### Deadlock prevention
+#### Deadlock prevention
 
 The main objective was to allow coders to obtain the two dongles necessary for compilation while maintaining concurrent execution and avoiding deadlocks.
 
@@ -117,29 +121,33 @@ This strategy breaks the unique resource acquisition order. If all threads attem
 
 Furthermore, coders with even identifiers implement a small delay before starting their execution. This time lag reduces initial contention over the dongles, better distributes resource requests, and promotes a higher degree of parallelism during the simulation.
 
-## Thread synchronization mechanisms 
+### ♦️ Thread synchronization mechanisms 
 
-### Register Serialization
+#### Register Serialization
 
 To ensure that register messages are readable and consistent, access to `printf` is protected by a dedicated mutex. Before writing to the console, each programmer must acquire this mutex, guaranteeing that only one thread can print at a time.
 
 This prevents the output of multiple threads from becoming mixed, resulting in deterministic and readable registers that accurately reflect the order of events. Data accessed by threads is also protected with a mutex, such as dongle status, queue, and cooldown.
 
-### Exhaustion Detection and Termination
+#### Exhaustion Detection and Termination
 
 Exhaustion detection is handled by a dedicated monitoring thread that continuously checks whether any programmer has exceeded the allowed time without compiling.
 
 Separating this responsibility from the worker threads centralizes the detection logic and allows exhaustion to be identified as soon as it occurs, regardless of what the programmers are doing. The monitoring thread terminates only when the simulation ends, either because a scheduler times out or because all necessary builds have completed. The main thread waits (`pthread_join`) for the monitoring thread to finish before closing the program, ensuring a clean and synchronized termination.
 
-# Resources
+---
+
+## 📚 Resources
 - https://dev.to/yel-bakk/codexion-4fk8 Codexion concept.
 - https://dev.to/yel-bakk/thread-in-c-codexion-42-1ao Codexion threads.
 - https://www.youtube.com/watch?v=d9s_d28yJq0&list=PLfqABt5AS4FmuQf70psXrsMLEDQXNkLq2 Understanding multi-threading in C.
 
-# Use of AI
+---
 
-AI tools (ChatGPT) were used to:
+## 🤖 Use of AI
+
+AI tools (**ChatGPT**) were used to:
 
 - Understand the topic and the development of the structures.
 - Provide examples of the use of threads, mutexes, locks, and destruction.
-- Understand memory leaks (Valgrind) and how to detect them.
+- Understand memory leaks (**Valgrind**) and how to detect them.
