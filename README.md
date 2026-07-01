@@ -8,8 +8,8 @@
 
 The simulation implements two scheduling algorithms:
 
-- FIFO (First In, First Out)
-- EDF (Earliest Deadline First)
+- **FIFO** (First In, First Out)
+- **EDF** (Earliest Deadline First)
 
 ---
 
@@ -26,19 +26,19 @@ The simulation implements two scheduling algorithms:
 ## 🛠️ Run and other Commands
 
 ```bash
-make          # Ejecution
-make re
-make clean
-make fclean
+make          # Compile the source code.
+make clean    # Delete the object files (.o).
+make fclean   # Perform a complete cleaning.
+make re       # Force a rebuild from scratch.
 ```
 
 ## ▶️ Uso
 
 ```bash
-./codexion <number_of_coders> <burnout_time> <compile_time><debug_time> <refactor_time> <compile_required> <dongle_cooldown> <fifo|edf>
+./codexion <number_of_coders> <burnout_time> <compile_time> <debug_time> <refactor_time> <compile_required> <dongle_cooldown> <fifo|edf>
 ```
 
-Ejemplo:
+Example:
 
 ```bash
 ./codexion 5 550 100 100 100 3 50 fifo
@@ -103,7 +103,17 @@ valgrind ./codexion 5 1000 300 10 10 3 10 edf
 valgrind --tool=drd ./codexion 3 500 50 50 50 3 10 edf
 ```
 
-Running Valgrind causes delays in the execution of codexion; it is recommended to keep the number of coders, compilation time, debugging time, refactoring time, cooldown time and number of compilations to a minimum. And more burnout time.
+Running Valgrind causes delays in codexion execution. It is recommended to increase the **time_burnout** and minimize the **number_of_coders**, **burnout_time**, **compile_time**, **debug_time**, **refactor_time**, **compile_required** and **dongle_cooldown**.
+
+Example:
+
+```bash
+valgrind ./codexion 2 550000 50 50 50 1 50 fifo
+```
+
+```bash
+valgrind --tool=drd ./codexion 2 550000 50 50 50 1 50 fifo
+```
 
 ---
 
@@ -140,6 +150,8 @@ Separating this responsibility from the worker threads centralizes the detection
 ## 📚 Resources
 - https://dev.to/yel-bakk/codexion-4fk8 Codexion concept.
 - https://dev.to/yel-bakk/thread-in-c-codexion-42-1ao Codexion threads.
+- https://www.youtube.com/watch?v=faZEhIHdJx8 use mutex.
+- https://www.youtube.com/watch?v=M9HHWFp84f0 multithreading vision in programming.
 - https://www.youtube.com/watch?v=d9s_d28yJq0&list=PLfqABt5AS4FmuQf70psXrsMLEDQXNkLq2 Understanding multi-threading in C.
 
 ---
